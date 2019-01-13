@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>반복문에서 break, continue 사용하기 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="JS에서 break와 continue사용하기자바스크립트에서 제공하는 반복문으로 break와 continue를 사용해보자.">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="반복문에서 break, continue 사용하기">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/01/08/js-forEach/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="JS에서 break와 continue사용하기자바스크립트에서 제공하는 반복문으로 break와 continue를 사용해보자.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="반복문에서 break, continue 사용하기">
+<meta name="twitter:description" content="JS에서 break와 continue사용하기자바스크립트에서 제공하는 반복문으로 break와 continue를 사용해보자.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            반복문에서 break, continue 사용하기
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-01-08T14:35:33+09:00">
+	
+		    1월 08, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/method/">method</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="JS에서-break와-continue사용하기"><a href="#JS에서-break와-continue사용하기" class="headerlink" title="JS에서 break와 continue사용하기"></a>JS에서 break와 continue사용하기</h3><p>자바스크립트에서 제공하는 반복문으로 break와 continue를 사용해보자.</p>
+<a id="more"></a>
+<p>보통 프로그래밍 언어에서 break와 continue을 사용할때 아래의 경우처럼 문을 사용합니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">if</span> (i == <span class="number">2</span>) <span class="keyword">continue</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> i = <span class="number">0</span>, j = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">while</span> (i &lt; <span class="number">10</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (i == j) <span class="keyword">break</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(i);   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>forEach에서는 어떻게 사용할까요?</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>].forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (v == <span class="number">2</span>) <span class="keyword">continue</span>; <span class="comment">// or break;</span></span><br><span class="line">  <span class="built_in">console</span>.log(v)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<span class="highlight-text danger">forEach에서는 continue와 break를 사용할 수 없습니다.</span>
+<p>대신 .some()을 사용 할 수 있습니다.</p>
+<p>.some()은 컬렉션의 요소 중 최소 1개라도 조건을 만족시키는지 검사하는 메서드 입니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>].some(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (v == <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(v)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>return true; 가 break 라면,<br>return false; 는 continue 입니다.</p>
+<blockquote>
+<p>출처 - Outsider님 Blog : <a href="https://blog.outsider.ne.kr/847" target="_blank" rel="noopener">forEach에 break문 대신 some 사용하기</a></p>
+</blockquote>
+<p>jQuery의 $.each에서는 어떨까요?</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$.each([<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (v == <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(v)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>return true; 가 continue 이며,<br>return false; 는 break 입니다.</p>
+<p>some과 다른이유는 some이 break와 continue를 위해 return true와 false를 하는 용도로 만들어진게 아니기 때문입니다.</p>
+<p>간단한 경우지만 막상 쓰려면 기억이 잘 나지 않는경우가 있는데 알고 있으면 좋은것 같습니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/01/30/css-multiline_ellipsis/" data-tooltip="여러줄에서 말줄임표 사용하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2016/12/08/css-table_layout/" data-tooltip="테이블 패턴을 활용한 레이아웃">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/01/30/css-multiline_ellipsis/" data-tooltip="여러줄에서 말줄임표 사용하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2016/12/08/css-table_layout/" data-tooltip="테이블 패턴을 활용한 레이아웃">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/01/08/js-forEach/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/01/08/js-forEach/';
+                 
+                    this.page.identifier = '2017/01/08/js-forEach/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

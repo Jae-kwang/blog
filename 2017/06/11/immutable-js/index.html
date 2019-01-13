@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>immutable.js 알아보기 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,library">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Immutable.js 란?React를 접했을 때 immutable.js도 같이 알 되었는데, 당시에는 정확히 왜 필요한지 몰랐습니다.하지만 몇 번 보다 보니 그 이유를 알게 되었고, 제가 이해한 부분과 사용법을 정리해보려고 합니다.">
+<meta name="keywords" content="javascript,library">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="immutable.js 알아보기">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/06/11/immutable-js/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Immutable.js 란?React를 접했을 때 immutable.js도 같이 알 되었는데, 당시에는 정확히 왜 필요한지 몰랐습니다.하지만 몇 번 보다 보니 그 이유를 알게 되었고, 제가 이해한 부분과 사용법을 정리해보려고 합니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.219Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="immutable.js 알아보기">
+<meta name="twitter:description" content="Immutable.js 란?React를 접했을 때 immutable.js도 같이 알 되었는데, 당시에는 정확히 왜 필요한지 몰랐습니다.하지만 몇 번 보다 보니 그 이유를 알게 되었고, 제가 이해한 부분과 사용법을 정리해보려고 합니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            immutable.js 알아보기
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-06-11T15:30:30+09:00">
+	
+		    6월 11, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/immutable/">immutable</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="Immutable-js-란"><a href="#Immutable-js-란" class="headerlink" title="Immutable.js 란?"></a>Immutable.js 란?</h3><p>React를 접했을 때 immutable.js도 같이 알 되었는데, 당시에는 정확히 왜 필요한지 몰랐습니다.<br>하지만 몇 번 보다 보니 그 이유를 알게 되었고, 제가 이해한 부분과 사용법을 정리해보려고 합니다.</p>
+<a id="more"></a>
+<h4 id="객체의-불변성"><a href="#객체의-불변성" class="headerlink" title="객체의 불변성"></a>객체의 불변성</h4><p>처음 ‘immutable:불변성’이란 단어는 낯설고 머리에 잘 와닿지 않았습니다.<br>불변성…불변성… 발음도 힘듭니다. 😧</p>
+<p>저는 머리가 좋지 않은 관계로 한번은 더 풀어서 이해해야 했습니다. </p>
+<blockquote>
+<p>내가 만드는 객체는 절대 변하지 않아, 그러니까 수정하려면 반드시 다른 걸 하나 새로 만들어야 해!</p>
+</blockquote>
+<p>React에서는 state 혹은 props에 변화가 감지되면 컴포넌트를 리랜더링합니다.</p>
+<span class="highlight-text danger">그런데 레퍼런스 값으로 데이터를 가지고 있는 정보들은 값이 달라져도, 레퍼런스가 같기 때문에 React는 값의 변화를 인지하지 못합니다.</span>
+<p>그래서 객체를 새로 만들어주어야 하는데 이때 immutable.js을 통해 더욱 손쉽게 데이터를 변경할 수 있습니다.</p>
+<h4 id="Without-immutable-js"><a href="#Without-immutable-js" class="headerlink" title="Without immutable.js"></a>Without immutable.js</h4><p>우선 immutable.js 없이 값을 수정하는 예제를 한번 확인해보시죠.</p>
+<p>React에서는 위에도 언급했듯 레퍼런스를 활용하는 데이터의 경우에는 새로운 값을 만들어 연결해주어야 하는데, 다음 예제와 같이 데이터가 배열인 경우 특정 idx 내부의 값을 변경할 때는 아래와 같이 적용해 볼 수 있습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Items: [</span><br><span class="line">    ...Items.slice(<span class="number">0</span>, idx),</span><br><span class="line">    &#123;</span><br><span class="line">      ...item,</span><br><span class="line">      tempValue: !item.tempValue</span><br><span class="line">    &#125;,</span><br><span class="line">    ...Items.slice(idx + <span class="number">1</span>, Items.length)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<ol>
+<li>기존 배열에서 slice()를 사용해 idx까지 배열을 자른다.</li>
+<li>수정할 idx의 데이터를 수정한다.</li>
+<li>수정한 idx 이후에 데이터를 slice() 통해 자른다.</li>
+<li>3개의 작업 된 데이터를 하나의 배열을 만들어 다시 기존 변수에 넣어준다.</li>
+</ol>
+<div class="alert warning"><p>단순히 값을 변경해주는 부분인데 매우 번거로울 뿐만 아니라, 데이터가 구조가 복잡하거나 많을 때는 더욱 많은 리소스 사용하게 될 것입니다.</p>
+</div>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Items[idx].tempValue = !Items[idx].tempValue;</span><br></pre></td></tr></table></figure>
+<p>이렇게 사용해도 정상작동되면 참 좋을 텐데요? 😏</p>
+<h4 id="Use-immutable-js"><a href="#Use-immutable-js" class="headerlink" title="Use immutable.js"></a>Use immutable.js</h4><p>immutable 코드를 쓰기 전엔 8줄의 코드가 3줄로 줄었습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Items = Itmes.update(idx, (item) =&gt; &#123;</span><br><span class="line">   <span class="keyword">return</span> item.set(<span class="string">'tempValue'</span>, !item.get(<span class="string">'tempvalue'</span>)); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>간단히 설명하면, immutable.js에서 제공되는 <span class="highlight-text orange">update</span>를 활용하여 변경하고자 하는 idx를 받아 해당 위치의 값을 <span class="highlight-text orange">set</span>로 수정하는데<span class="highlight-text orange">get</span>를 사용해 현재 값을 받아 변경합니다.<br><div class="alert info"><p>게다가 더 빠르다고 합니다.<br><a href="http://blog.klipse.tech/javascript/2016/06/23/immutable-perf.html" target="_blank" rel="noopener">http://blog.klipse.tech/javascript/2016/06/23/immutable-perf.html</a></p>
+</div></p>
+<h3 id="immutable-js-간단-사용법"><a href="#immutable-js-간단-사용법" class="headerlink" title="immutable.js 간단 사용법"></a>immutable.js 간단 사용법</h3><h5 id="1-데이터-생성"><a href="#1-데이터-생성" class="headerlink" title="1. 데이터 생성"></a>1. 데이터 생성</h5><p>immutable을 사용하면 객체는 MAP으로 감싸주어야 합니다.<br>배열의 경우에는 List로 감싸줍니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// basic object</span></span><br><span class="line"><span class="keyword">var</span> data = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  c: &#123;</span><br><span class="line">    d: <span class="number">3</span>,</span><br><span class="line">    e: <span class="number">4</span>,</span><br><span class="line">    f: <span class="number">5</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// use immutable.js</span></span><br><span class="line"><span class="keyword">var</span> <span class="built_in">Map</span> = Immutable.Map;</span><br><span class="line"><span class="keyword">var</span> data = <span class="built_in">Map</span>(&#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span>,</span><br><span class="line">  c: <span class="built_in">Map</span>(&#123;</span><br><span class="line">    d: <span class="number">3</span>,</span><br><span class="line">    e: <span class="number">4</span>,</span><br><span class="line">    f: <span class="number">5</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="2-데이터-읽기"><a href="#2-데이터-읽기" class="headerlink" title="2. 데이터 읽기"></a>2. 데이터 읽기</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 자바스크립트 객체로 변환하기 */</span></span><br><span class="line">data.toJS(); <span class="comment">// &#123; a:1, b:2, c: &#123; d: 3, e: 4, f: 5 &#125; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 특정 키의 값 얻어오기 */</span></span><br><span class="line">data.get(<span class="string">'a'</span>); <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 내부의 키의 값 얻어오기 */</span></span><br><span class="line">data.getIn([<span class="string">'c'</span>, <span class="string">'d'</span>]) <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<h5 id="3-데이터-수정"><a href="#3-데이터-수정" class="headerlink" title="3. 데이터 수정"></a>3. 데이터 수정</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 값 설정하기 */</span></span><br><span class="line"><span class="keyword">var</span> newData = data.set(<span class="string">'a'</span>, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 내부의 값 설정하기 */</span></span><br><span class="line"><span class="keyword">var</span> newData = data.setIn([<span class="string">'c'</span>, <span class="string">'d'</span>], <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 내부의 객체를 설정하기 */</span></span><br><span class="line"><span class="keyword">var</span> newData = data.set(<span class="string">'c'</span>, <span class="built_in">Map</span>(&#123; <span class="attr">d</span>: <span class="number">10</span>, <span class="attr">e</span>: <span class="number">10</span>, <span class="attr">f</span>: <span class="number">10</span> &#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 값 여러개 설정하기 */</span></span><br><span class="line"><span class="keyword">var</span> newData = data.merge(&#123; <span class="attr">a</span>: <span class="number">10</span>, <span class="attr">b</span>: <span class="number">10</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">/* nest된 키에 값 여러개 설정하기 */</span></span><br><span class="line"><span class="keyword">var</span> newData = data.mergeIn([<span class="string">'c'</span>], &#123; <span class="attr">d</span>: <span class="number">10</span>, <span class="attr">e</span>: <span class="number">10</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* List 일경우 값 추가하기 */</span></span><br><span class="line"><span class="keyword">var</span> newList = list.push(<span class="built_in">Map</span>(&#123;<span class="attr">value</span>: <span class="number">3</span>&#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment">/* List 일경우 값 앞에 추가하기 */</span></span><br><span class="line"><span class="keyword">var</span> newList = list.unshift(<span class="built_in">Map</span>(&#123;<span class="attr">value</span>: <span class="number">0</span>&#125;))</span><br></pre></td></tr></table></figure>
+<h5 id="4-데이터-삭제"><a href="#4-데이터-삭제" class="headerlink" title="4. 데이터 삭제"></a>4. 데이터 삭제</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 아이템 제거 */</span></span><br><span class="line"><span class="keyword">var</span> newList = list.delete(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 가장 마지막 아이템 제거 */</span></span><br><span class="line"><span class="keyword">var</span> newList = list.pop();</span><br></pre></td></tr></table></figure>
+<p>공식 페이지 : <a href="https://facebook.github.io/immutable-js/" target="_blank" rel="noopener">https://facebook.github.io/immutable-js/</a></p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/immutable-js/">immutable.js</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/21/redux-use/" data-tooltip="Redux 코드로 이해하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/06/react-component_style/" data-tooltip="React에서 컴포넌트 스타일링 하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/21/redux-use/" data-tooltip="Redux 코드로 이해하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/06/react-component_style/" data-tooltip="React에서 컴포넌트 스타일링 하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/11/immutable-js/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/06/11/immutable-js/';
+                 
+                    this.page.identifier = '2017/06/11/immutable-js/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

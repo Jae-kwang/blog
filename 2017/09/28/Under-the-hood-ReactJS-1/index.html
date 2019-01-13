@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Under-the-hood-ReactJS(1) - 마운트 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="react">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Under-the-hood-ReactJS를 읽어보면서 이해한 부분을 정리해보았습니다.Intro ~ 파트7까지의 마운트 부분에 대한 설명이 있습니다.">
+<meta name="keywords" content="react">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Under-the-hood-ReactJS(1) - 마운트">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Under-the-hood-ReactJS를 읽어보면서 이해한 부분을 정리해보았습니다.Intro ~ 파트7까지의 마운트 부분에 대한 설명이 있습니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Under-the-hood-ReactJS(1) - 마운트">
+<meta name="twitter:description" content="Under-the-hood-ReactJS를 읽어보면서 이해한 부분을 정리해보았습니다.Intro ~ 파트7까지의 마운트 부분에 대한 설명이 있습니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/react.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/react.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Under-the-hood-ReactJS(1) - 마운트
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-09-28T09:18:00+09:00">
+	
+		    9월 28, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/react/">react</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>Under-the-hood-ReactJS를 읽어보면서 이해한 부분을 정리해보았습니다.<br>Intro ~ 파트7까지의 마운트 부분에 대한 설명이 있습니다.</p>
+<a id="more"></a>
+<p>처음 뭔가를 배울때는 아무것도 모르는 상태에서 책이나 다른 문서의 예제를 약간씩 따라 치면서 익히곤 합니다.</p>
+<p>그러다 스스로 뭔가 대충 “아, 정확히는 모르겠지만 이건 요런 방식이구나…” 라고 생각되는 시점이 오면 “그런데 이게 어떻게 되는거지?”라고 생각하게 되는 것 같은데 이때 <a href="https://bogdan-lyashenko.github.io/Under-the-hood-ReactJS/" target="_blank" rel="noopener">Under-the-hood-ReactJS</a>를 알게되었습니다.</p>
+<p>영어실력이 좋지 않아서 번역기의 도움을 받으면서 몇 번씩 읽어보았고 제가 이해한 방식으로 해석하는 작업을 몇 차례 반복했습니다. 한달정도의 시간동안 틈틈히 공부 했지만, 그럼에도 이해 안된 부분들이 조금씩은 있어서, 번역된 내용중에 ‘한글인데 뭔말인지 모르겠다…’ 란 부분은 바로 그러한 부분이니 참고 부탁드립니다. :)</p>
+<p>현재 저는 올초부터 리엑트를 공부하기 시작했지만, 실제 총 시간으로 따지만 약 두달 정도만 리엑트에 집중했던것 같습니다. 이것을 말하는 이유는 저와 비슷한 초보자들도 읽어볼 수 있을 만한 글이라는것을 말씀드리고 싶어서 입니다.</p>
+<p>다음은 저자가 14개의 파트로 나눠서 작업한 부분들을 번역하면서 간단히 요약해 놓은 부분입니다. </p>
+<hr>
+<h3 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h3><ul>
+<li><p>전체적으로 두가지 프로세스를 다루고 있습니다 : <strong>‘마운트’와 ‘업데이트’</strong></p>
+<ul>
+<li>마운트 : 파트 1~7 / 시작 : ReactDOM.render</li>
+<li>업데이트 : 파트 8~14 / 시작 : component.setState </li>
+</ul>
+</li>
+<li><p>코드에 상응하는 전체 스키마가 있는 것은 아닙니다.</p>
+</li>
+<li><p>마지막에 보이는 샘플 코드는 앞으로 나오는 파트들에 꾸준히 예제로 쓰이고 있습니다.</p>
+</li>
+</ul>
+<div class="alert info"><p>각 파트별로 해당되는 스키마를 잘라서 보여주기는 합니다만 <strong>전체 스키마</strong>와 <strong>샘플코드</strong>를 항상 띄워 놓고 다음 파트들을 살펴보면 보면 이해가 좀 더 수월한 것 같습니다.</p>
+</div>
+<hr>
+<h3 id="파트-0"><a href="#파트-0" class="headerlink" title="파트 0"></a>파트 0</h3><h4 id="ReactDom-render"><a href="#ReactDom-render" class="headerlink" title="ReactDom.render"></a>ReactDom.render</h4><ul>
+<li>앱의 시작은 ReactDom.render에서 부터 시작됩니다.<ul>
+<li>JSX가 리엑트의 엘리먼트되는 시작이며, 이건 단순히 plain objects에 불과합니다.</li>
+<li>실제로, ReactDOM에는 로직이 없고, <code>ReactMount</code>를 사용하기 위한 인터페이스일 뿐입니다. 따라서 <code>ReactDOM.render</code>를 호출하면 기술적으로 <code>ReactMount.render</code>를 호출합니다.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>마운팅이란?</strong><br>  DOM 엘리먼트를 생성하고 제공된 container에 삽입하여 리엑트 컴포넌트를 초기화하는 작업입니다.</p>
+</blockquote>
+<h4 id="React-컴포넌트-인스턴스화"><a href="#React-컴포넌트-인스턴스화" class="headerlink" title="React 컴포넌트 인스턴스화"></a>React 컴포넌트 인스턴스화</h4><ul>
+<li>가장 먼저 TopLevelWrapper의 인스턴스화가 먼저 일어나면서 트리를 렌더링 합니다.</li>
+</ul>
+<div class="alert info"><p>JSX를 작성해보셨다면, JSX 사용시 하나의 root 엘리먼트로 감싸주어야 한다는 사실을 알고있으실 텐데요. 그게 바로 TopLevelWrapper라고 생각하시면 될 것 같습니다.</p>
+</div>
+<ul>
+<li><p>JSX는 내부 컴포넌트로 변환됨</p>
+</li>
+<li><p>내부 컴포넌트의 종류</p>
+<ul>
+<li>ReactCompositeComponent : 자체 컴포넌트 클래스</li>
+<li>ReactDOMComponent : HTML 태그 클래스</li>
+<li>ReactDOMTextComponent : text nodes 클래스</li>
+</ul>
+</li>
+<li><p>Virtual DOM</p>
+<ul>
+<li>Virtual DOM은 리엑트가 diff 중에 DOM을 직접 건드리지 않는데 사용되는 DOM 표현의 일종.(개념)</li>
+<li>Virtual DOM은 위 3개의 내부 컴포넌트를 참조.</li>
+</ul>
+</li>
+</ul>
+<div class="alert info"><p>마운트라는 개념을 잘 생각해보고, 내부 컴포넌트의 종류 잘 기억하는게 좋은것 같습니다. </p>
+</div>
+<hr>
+<h3 id="파트-1"><a href="#파트-1" class="headerlink" title="파트 1"></a>파트 1</h3><h4 id="Transaction-1"><a href="#Transaction-1" class="headerlink" title="Transaction(1)"></a>Transaction(1)</h4><ul>
+<li><p><code>ReactUpdates</code>모듈을 통해 컴포넌트 인스턴스가 리엑트 생태계에 연결 되도록 합니다.</p>
+</li>
+<li><p>리엑트는 chunks 형태로 업데이트를 수행하기 때문에 사전/사후 처리를 한번만 적용할 수 있도록 트렌젝션을 활용합니다.</p>
+</li>
+<li><p>리엑트에서 트렌잭션이 어떻게 사용되고 있는지 말하고 있습니다.</p>
+<ul>
+<li><code>Transaction</code> 모듈에서 확장하여 사용되며, <strong>어떤 트렌잭션 래퍼로 감싸는지에 따라 목적이 달라집니다.</strong></li>
+<li>래퍼는 기본적으로는 초기화 및 클로즈 메소드를 포함한 객체입니다.</li>
+</ul>
+</li>
+<li><p><code>ReactDefaultBatchingStrategyTransaction</code>레퍼에는 ‘FLUSH_BATCHED_UPDATES’, ‘RESET_BATCHED_UPDATES’래퍼가 존재합니다.</p>
+<ul>
+<li>내부에서 <code>initialize</code> 메소드가 비어있지만, <code>close</code>에는 <code>ReactUpdates.flushBatchedUpdates</code>를 호출합니다.</li>
+<li><code>ReactUpdates.flushBatchedUpdates</code>는 dirty 컴포넌트에 대한 검증을 시작합니다. (파트 8 이후)</li>
+</ul>
+</li>
+</ul>
+<div class="alert info"><p>해당 컴포넌트가 마운팅 되기전에 일련 작업들을 한번에 처리하기위해 <strong>트렌젝션</strong>을 사용해서 진행되고 있습니다.</p>
+</div>
+<hr>
+<h3 id="파트-2"><a href="#파트-2" class="headerlink" title="파트 2"></a>파트 2</h3><h4 id="Transaction-2"><a href="#Transaction-2" class="headerlink" title="Transaction(2)"></a>Transaction(2)</h4><ul>
+<li><p>파트 1의 트렌젝션에서의 메소드 실행부분에서 발생되는 또 다른 트렌잭션.</p>
+</li>
+<li><p>여기에서는 트랜젝션이 다음을 제어하는데 사용됩니다.</p>
+<ul>
+<li>현재 선택한 영역이 다른 영역들로부터 침범되지 않도록 합니다.</li>
+<li>리플로우가 발생되는 정도의 DOM 조작 발생 가능성이 있는 이벤트를 제한합니다.</li>
+<li>이런 과정을 <code>initialize</code> 할 때 제한하고, <code>close</code> 할때 사용하도록 설정합니다.</li>
+</ul>
+</li>
+<li><p>파트 2의 메소드 실행시 <code>ReactReconciler.mountComponent</code>로 DOM에 넣을 준비가 된 마크업을 리턴합니다.</p>
+</li>
+</ul>
+<div class="alert info"><p>랜더링을 위한 마크업을 만들기 전에 다른 영역에 영향을 미칠 수 있는 부분을 제한하는데 이를 <strong>트랜젝션</strong>을 활용하고 있다는 것을 알 수 있습니다.   </p>
+</div>
+<hr>
+<h3 id="파트-3"><a href="#파트-3" class="headerlink" title="파트 3"></a>파트 3</h3><h4 id="Mount"><a href="#Mount" class="headerlink" title="Mount"></a>Mount</h4><ul>
+<li><p>컴포넌트의 트리에 처음 삽입되는 컴포넌트는 TopLevelWrapper 입니다.</p>
+<ul>
+<li>이후에 자식의 자식들도 같은 방식으로 마운트 됩니다. </li>
+</ul>
+</li>
+<li><p>ExampleApplication 컴포넌트에 대한 ReactCompositeComponent 인스턴스 생성(new ExampleApplication())</p>
+<ul>
+<li>생성자를 통해 인스턴스에 props, context, refs, updater가 할당됩니다.<br>(updater는 setState에 의해 사용됩니다.)</li>
+</ul>
+</li>
+</ul>
+<h4 id="초기-마운트-수행"><a href="#초기-마운트-수행" class="headerlink" title="초기 마운트 수행"></a>초기 마운트 수행</h4><ul>
+<li><p>초기 마운트 수행</p>
+<ul>
+<li>componentWillMount가 호출됩니다.</li>
+<li>updater가 할당되었기 때문에 componentWillMount안에서 setState를 사용할 수는 있습니다.<br>   하지만 render()전에 호출되기 때문에 컴포넌트가 아직 마운트 되지 않았기 때문에, state를 알 수 가 없어 state를 설정해도 리렌더링이 발생되지 않습니다.</li>
+<li>componentDidMount 트랜젝션 큐에 넣어둡니다.(이후에 실행되기 때문에)     </li>
+<li>render()가 호출됩니다.</li>
+</ul>
+</li>
+<li><p>render 메소드에서 얻은 엘리먼트를 기반으로 그 자식에 대한 가상 컴포넌트(ReactDOMComponent 인스턴스)를 생성합니다.</p>
+<ul>
+<li>ReactReconciler.mountComponent() 호출합니다.</li>
+</ul>
+</li>
+</ul>
+<div class="alert info"><ul>
+<li>코드랑 매칭 시켜서 이해해 볼 수 있는 첫번째 부분입니다. <code>constructor</code>, 라이프 사이클 메소드인 <code>componentWillMount</code>와 <code>componentDidMount</code>를 연결시켜 볼 수 있습니다.</li>
+<li>컴포넌트의 인스턴스를 만들면서 ReactCompositeComponent(내부 컴포넌트)를 만들고, 그 자식의 인스턴스를 만들어 ReactDOMComponent(HTML 컴포넌트)까지 생성합니다.</li>
+</ul>
+</div>
+<hr>
+<h4 id="파트-4"><a href="#파트-4" class="headerlink" title="파트 4"></a>파트 4</h4><ul>
+<li><p>HTML 태그에서 video, form, textarea의 경우에는 추가 래핑을 진행합니다.</p>
+</li>
+<li><p>내부 props가 올바르게 설정되었는지 확인하기 위해 유효성 검사 메서드를 호출합니다.</p>
+</li>
+<li><p>실제 HTML 엘리먼트는 document.createElement에 의해 생성됩니다.</p>
+</li>
+</ul>
+<hr>
+<h4 id="파트-5"><a href="#파트-5" class="headerlink" title="파트 5"></a>파트 5</h4><ul>
+<li>이전 props와 새 props의 차이를 계산합니다.<ul>
+<li>순서 : 스타일 업데이트 -&gt; 트랜잭션 패턴을 이용해 이벤트 처리 -&gt; attribute, property 업데이트</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="파트-6"><a href="#파트-6" class="headerlink" title="파트 6"></a>파트 6</h4><ul>
+<li><p>자식 요소들을 관리하는 <code>ReactMultiChild</code> 모듈의 <code>mountChildren</code>메소드를 통해 자식요소들을 인스턴스화하고 마운팅합니다.</p>
+</li>
+<li><p>전반적인 마운팅 프로세스에 대한 전체적인 확인</p>
+<ul>
+<li>커스텀 컴포넌트 인스턴스 생성(<code>constructor</code> 호출)<br>-&gt; render 메소드 호출로 랜더링 진행 하고 <code>React.createElement</code>로 엘리먼트 생성<br>-&gt; 커스텀 컴포넌트가 리턴된 경우 ‘ReactCompositeComponent’로 인스턴스 화하고 HTML인 경우 <code>ReactDOMComponent</code>로 인스턴스화 함<br>-&gt; 반복하면서 DOM 엘리먼트가 생성되면 이벤트 리스너를 할당하면서 DOM 컴포넌트를 마운트합니다.<br>-&gt; 다음 자식들을 이어서 위의 동작들을 반복합니다.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-7"><a href="#파트-7" class="headerlink" title="파트 7"></a>파트 7</h3><ul>
+<li><p>마운팅 메소드 실행의 결과로 document에 세팅할 준비가 된 HTML 엘리먼트를 가질 수 있었지만, 실제로는 HTML 마크업이 아닌, children, node(실제 DOM 노드)등의 필드를 가진 데이터 구조입니다.</p>
+</li>
+<li><p>parentNode.insertBefore로 인해 드디어 document에 엘리먼트가 추가됩니다.</p>
+</li>
+<li><p>아직 트렌젝션의 중간 단계이기 때문에 상위 두 단계의 트렌젝션을 모두 닫아줍니다(파트2).</p>
+</li>
+</ul>
+<hr>
+<p>여기까지가 마운팅 프로세스에 대한 일련의 과정입니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/react/">react</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-2/" data-tooltip="Under-the-hood-ReactJS(2) - 업데이트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/21/redux-use/" data-tooltip="Redux 코드로 이해하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-2/" data-tooltip="Under-the-hood-ReactJS(2) - 업데이트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/21/redux-use/" data-tooltip="Redux 코드로 이해하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-1/';
+                 
+                    this.page.identifier = '2017/09/28/Under-the-hood-ReactJS-1/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

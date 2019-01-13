@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>CSS 말줄임표 사용시 기억할 점 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="css">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="CSS 말 줄임표를 사용하려면 ?CSS를 사용시 단락에 ‘말 줄임표’를 사용할 경우가 있는데,이때 ‘text-overflow: ellipsis’ 속성을 사용하여 적용 할 수 있습니다.">
+<meta name="keywords" content="css">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="CSS 말줄임표 사용시 기억할 점">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="CSS 말 줄임표를 사용하려면 ?CSS를 사용시 단락에 ‘말 줄임표’를 사용할 경우가 있는데,이때 ‘text-overflow: ellipsis’ 속성을 사용하여 적용 할 수 있습니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS 말줄임표 사용시 기억할 점">
+<meta name="twitter:description" content="CSS 말 줄임표를 사용하려면 ?CSS를 사용시 단락에 ‘말 줄임표’를 사용할 경우가 있는데,이때 ‘text-overflow: ellipsis’ 속성을 사용하여 적용 할 수 있습니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            CSS 말줄임표 사용시 기억할 점
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2016-11-15T18:49:54+09:00">
+	
+		    11월 15, 2016
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/css/">css</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="CSS-말-줄임표를-사용하려면"><a href="#CSS-말-줄임표를-사용하려면" class="headerlink" title="CSS 말 줄임표를 사용하려면 ?"></a>CSS 말 줄임표를 사용하려면 ?</h3><p>CSS를 사용시 단락에 ‘말 줄임표’를 사용할 경우가 있는데,<br>이때 ‘text-overflow: ellipsis’ 속성을 사용하여 적용 할 수 있습니다.</p>
+<a id="more"></a>
+<p>사용하려면 다른 속성들이 같이 사용되어야 하는데 거의 공식과 같으니 알아두면 좋습니다.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.ellipsis</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">150px</span>;</span><br><span class="line">    <span class="attribute">text-overflow</span>: ellipsis;</span><br><span class="line">    <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">    <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="CSS-말줄임표와-사용-가능한-마크업"><a href="#CSS-말줄임표와-사용-가능한-마크업" class="headerlink" title="CSS 말줄임표와 사용 가능한 마크업"></a>CSS 말줄임표와 사용 가능한 마크업</h3><p>위의 방식처럼 잘 사용하다가 갑자기 적용이 안되면서 삽질을 한차례 했습니다.<br>해당 속성을 쓰는데 있어 기초가 되는 사실을 잊었기 때문입니다.</p>
+<p>위의 코드를 보면 ‘ellipsis’를 쓰기 위해서는 ‘width’를 지정 해주었습니다.<br>‘width’를 지정해야 한다는 의미는 ‘width’가 <span class="highlight-text danger">지정 가능</span>해야 한다는 부분입니다.</p>
+<p>평소 저는 ‘ellipsis’를 <code>&lt;p&gt;</code>에 주로 사용했습니다.<br>그러나 이번에는 최근에 <code>&lt;b&gt;</code>와 <code>&lt;strong&gt;</code>의 차이를 알게되면서 “마크업 사용시 목적에 맞게 사용하자” 라는 생각을 갖고, <code>&lt;b&gt;</code>에 해당 css를 적용했습니다.</p>
+<p>하지만, <code>&lt;b&gt;</code>는 기본적으로 <code>&lt;span&gt;</code>과 같은 ‘display: inline’속성을 가지고 있기 때문에 적용이 불가능했고,<br><code>&lt;b&gt;</code>의 ‘display: inline-block’으로 바꾸고 나서야 정상 작동하는걸 확인할 수 있었습니다.</p>
+<p>간단한 CSS라도 충분히 이해하고 사용해야 할것 같습니다. </p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/css/">css</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2016/12/08/css-table_layout/" data-tooltip="테이블 패턴을 활용한 레이아웃">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2016/12/08/css-table_layout/" data-tooltip="테이블 패턴을 활용한 레이아웃">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2016/11/15/css-ellipsis/';
+                 
+                    this.page.identifier = '2016/11/15/css-ellipsis/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

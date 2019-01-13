@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>리엑트로 프로젝트 갈아입히기 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="react,SSR,project,styled-components">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="2018년의 첫 번째 목표는 “서비스 중인 프로젝트를 ‘리엑트’로 바꿔보자!”입니다. 이 목표를 수행하면서 진행한 여러 작업을 정리해보려 합니다.">
+<meta name="keywords" content="react,SSR,project,styled-components">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="리엑트로 프로젝트 갈아입히기">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="2018년의 첫 번째 목표는 “서비스 중인 프로젝트를 ‘리엑트’로 바꿔보자!”입니다. 이 목표를 수행하면서 진행한 여러 작업을 정리해보려 합니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/cycle.png">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/areyoukiddingme.gif">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.229Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="리엑트로 프로젝트 갈아입히기">
+<meta name="twitter:description" content="2018년의 첫 번째 목표는 “서비스 중인 프로젝트를 ‘리엑트’로 바꿔보자!”입니다. 이 목표를 수행하면서 진행한 여러 작업을 정리해보려 합니다.">
+<meta name="twitter:image" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/cycle.png">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/project-react_bg-cover.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/project-react_bg-cover.jpg" />
+    
+    
+        <meta property="og:image" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/project-react_bg.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://jae-kwang.github.io/blog/2018/02/04/project-react/project-react_bg.jpg" />
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-center
+                    " style="background-image:url('/blog/2018/02/04/project-react/project-react_bg.jpg');" data-behavior="3">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            리엑트로 프로젝트 갈아입히기
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-02-04T15:37:32+09:00">
+	
+		    2월 04, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/react/">react</a>
+
+
+    
+</div>
+
+</div>
+            
+        </div>
+
+            <div id="main" data-behavior="3"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>2018년의 첫 번째 목표는 “서비스 중인 프로젝트를 ‘리엑트’로 바꿔보자!”입니다. 이 목표를 수행하면서 진행한 여러 작업을 정리해보려 합니다.</p>
+<a id="more"></a>
+<h3 id="서버사이드-렌더링-프로젝트-구축하기"><a href="#서버사이드-렌더링-프로젝트-구축하기" class="headerlink" title="서버사이드 렌더링 프로젝트 구축하기"></a>서버사이드 렌더링 프로젝트 구축하기</h3><p>프로젝트는 서버사이드 렌더링이 필요했습니다. <span class="highlight-text primary">SSR(Server Side Rendering)</span>이란 말 그대로 렌더링 되어야 할 파일들이 미리 서버에서 렌더링이 되어서 내려오는 것을 의미합니다.
+
+</p><p>리엑트는 Webpack을 통해 JSX로 형태로 구성된 파일들을 컴파일해서 브라우저가 읽을 수 있는 번들 파일을 만들어 화면을 렌더링하는 <span class="highlight-text primary">CSR(Client-side Rendering) </span>방식으로 렌더링하는 방식이 보통의 방식으로 사용되고 있습니다. 그러면 어떻게 리엑트가 SSR이 되도록 할까요?</p><p></p>
+<p>리엑트 사용 시 컴포넌트를 렌더링 하기 위해 ‘react-dom’을 import 하는데, 이때 ‘react-dom’에는 <code>renderToString</code>란 메서드가 존재합니다. 이는 리엑트 컴포넌트를 단순 문자열로 변환시켜서 서버에서 바로 사용할 수 있게 해줍니다.</p>
+<p>서버는 Node.js express 구성되어있으며, 아래와 같이 기본 html 형태를 템플릿 리터럴 형태로 내려주었습니다. 이때 <code>renderToString</code> 에 리엑트 엘리먼트를 넘긴 형태를 root 엘리먼트의 자식으로 넘겨주는 방식으로 사용할 수 있습니다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123; renderToString &#125; from 'react-dom/server'</span><br><span class="line"></span><br><span class="line">res.send(`</span><br><span class="line">    <span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSR App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'app'</span>&gt;</span>$&#123;renderToString(<span class="tag">&lt;<span class="name">App</span> <span class="attr">data</span>=<span class="string">&#123;preloadedState&#125;/</span>&gt;</span>)&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'bundle.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">`)</span><br></pre></td></tr></table></figure>
+<p>이렇게 작업한 ‘server.js’파일을 <code>node server.js</code> 가 아닌 <code>babel-node server.js</code>로 Run하여 서버를 띄웠습니다. 또한, webpack을 통해 얻은 ‘bundle.js’를 추가해 상호 작용이 가능하도록 했습니다. 여기에서 <code>preloadedState</code>는 서버에서 직접 받는 데이터로써 해당 데이터를 props로 전달해 component에서 활용합니다.</p>
+<h3 id="리덕스-Redux-설정하기"><a href="#리덕스-Redux-설정하기" class="headerlink" title="리덕스(Redux) 설정하기"></a>리덕스(Redux) 설정하기</h3><p>이 프로젝트는 크기가 크지 않아 처음에는 리덕스를 사용하지 않으려 했습니다. 하지만 앱의 기능 중 하나로 페이지 전체의 ‘언어변경’기능이 있었는데 이는 언어 변경 시 전체 페이지의 언어가 다른 국가의 언어로 변경되어야 했습니다. 그렇다는건 모든 텍스트가 직접 컴포넌트에 작성되어 있는 게 아니라 레퍼런스 값이어야 컨트롤이 가능하다는 것을 의미했습니다. <strong>매 컴포넌트 작업 시 언어정보를 root에서 받아서 사용하는 건 매우 비효율적인 작업이 아닐 수 없었습니다.</strong></p>
+<p>컴포넌트에서 즉시 값을 사용할 수 있게 리덕스를 적용해보았습니다. ‘redux’의 <code>createStore</code>를 사용해 서버에서 받은 값인 ‘preloadedState’와 store 를 컨트롤 하기 위한 ‘reducers’를 넘겨서 store를 생성합니다. 생성된 store를 react와 연결하는 역할을 하는 ‘react-redux’의 <code>Provider</code> 사용해 리엑트에 주입합니다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">import &#123; renderToString &#125; from 'react-dom/server'</span><br><span class="line">import &#123; createStore &#125; from 'redux'</span><br><span class="line">import &#123; Provider &#125; from 'react-redux'</span><br><span class="line">import reducers from './reducers'</span><br><span class="line"></span><br><span class="line">const store = createStore(reducers, preloadedStateㅇ)</span><br><span class="line"></span><br><span class="line">res.send(`</span><br><span class="line">    <span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSR Redux App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'app'</span>&gt;</span>$&#123;renderToString(<span class="tag">&lt;<span class="name">Provider</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span>&gt;</span><span class="tag">&lt;<span class="name">App</span> /&gt;</span><span class="tag">&lt;/<span class="name">Provider</span>&gt;</span>)&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.__PRELOADED_STATE__ = $&#123;<span class="built_in">JSON</span>.stringify(preloadedState)&#125;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'bundle.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">`)</span><br></pre></td></tr></table></figure>
+<p>이제 컴포넌트들은 store를 통해 값을 받아 사용할 수 있습니다. 랜더링 이후에도 ‘bundle.js’에도 동일하게 store를 사용해야하기 때문에 브라우저의 전역 변수인 window에 임의값(<code>__PRELOADED_STATE__</code>)에 preloadedState를 넣어 주도록 합니다.</p>
+<h3 id="HMR-Hot-Module-Replacement-사용하기"><a href="#HMR-Hot-Module-Replacement-사용하기" class="headerlink" title="HMR(Hot Module Replacement) 사용하기"></a>HMR(Hot Module Replacement) 사용하기</h3><span class="highlight-text primary">HMR</span>이란 코드의 수정사항 발생시 브라우저의 새고로침 없이 모듈을 업데이트 해주는 기능을 말합니다. 저는 이를 위해 <code>webpack-hot-middleware</code>를 사용하기로 했습니다. <code>webpack-hot-middleware</code>는 <code>webpack-dev-middleware</code>에 의존적이기 때문에 두가지가 설치되어야 합니다.<br><br>webpack.config.js에 entry와 plugins에 다음과 같이 추가합니다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">entry: [</span><br><span class="line">    <span class="string">'webpack-hot-middleware/client'</span>,</span><br><span class="line">    path.resolve(__dirname, <span class="string">'src'</span>)</span><br><span class="line">],</span><br><span class="line">plugins: [</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin(),</span><br><span class="line">    <span class="keyword">new</span> webpack.NoErrorsPlugin()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>server.js에 <code>webpack-dev-middleware</code>와 <code>webpack-hot-middleware</code>를 사용하도록 설정합니다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="keyword">var</span> webpackConfig = <span class="built_in">require</span>(<span class="string">'./webpack.config'</span>)</span><br><span class="line"><span class="keyword">var</span> compiler = webpack(webpackConfig)</span><br><span class="line"></span><br><span class="line">app.use(<span class="built_in">require</span>(<span class="string">"webpack-dev-middleware"</span>)(compiler, &#123;</span><br><span class="line">    noInfo: <span class="literal">true</span>,</span><br><span class="line">    publicPath: webpackConfig.output.publicPath</span><br><span class="line">&#125;))</span><br><span class="line"></span><br><span class="line">app.use(<span class="built_in">require</span>(<span class="string">"webpack-hot-middleware"</span>)(compiler))</span><br></pre></td></tr></table></figure></p>
+<p>store값 변경에도 hmr이 감지하도록 reducers를 바라보도록 합니다.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> reducers <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducers)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV == <span class="string">'development'</span> &amp;&amp; <span class="built_in">module</span>.hot) &#123;</span><br><span class="line">    <span class="built_in">module</span>.hot.accept(<span class="string">'./reducers'</span>, () =&gt; &#123;</span><br><span class="line">        store.replaceReducer(<span class="built_in">require</span>(<span class="string">'./reducers'</span>).default);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>위에 보시면 <code>process.env.NODE_ENV == &#39;development&#39;</code>가 있습니다. 이는 개발 환경에서만 이를 사용한다는 의미입니다. 이렇게 분기를 준 이유는 HRM은 일종의 가상 웹서버를 띄워서 그 웹서버를 제어해 컴포넌트 변화 시 화면을 리렌더링하는 방식입니다. 하지만 서버사이드 프로젝트로 다른 서버를 통해 렌더링 되게 프로젝트를 구성한 현재의 방식에는 적합하지 않습니다. 그렇기 때문에 랜더링 되는 부분을 개발 모드와 프로덕션 모드로 나눠줍니다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">if (process.env.NODE_ENV === 'development') &#123;</span><br><span class="line">    res.send(`</span><br><span class="line">        <span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSR Redux App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'app'</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.__PRELOADED_STATE__ = $&#123;<span class="built_in">JSON</span>.stringify(preloadedState)&#125;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'bundle.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">    `)</span><br><span class="line">&#125; else if (process.env.NODE_ENV === 'production')</span><br><span class="line">    res.send(`</span><br><span class="line">        <span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSR Redux App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'app'</span>&gt;</span>$&#123;renderToString(<span class="tag">&lt;<span class="name">Provider</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span>&gt;</span><span class="tag">&lt;<span class="name">App</span> /&gt;</span><span class="tag">&lt;/<span class="name">Provider</span>&gt;</span>)&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.__PRELOADED_STATE__ = $&#123;<span class="built_in">JSON</span>.stringify(preloadedState)&#125;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'bundle.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">    `)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>개발 모드에서는 <code>renderToString</code>을 사용하는 SSR이 아닌 CSR을 이용하도록 해서 HMR이 동작하도록 합니다.  </p>
+<blockquote>
+<p><a href="https://blog.cloudboost.io/live-reload-hot-module-replacement-with-webpack-middleware-d0a10a86fc80" target="_blank" rel="noopener">Live Reload / Hot Module Replacement with Webpack Middleware</a><br><a href="http://madole.github.io/blog/2015/08/26/setting-up-webpack-dev-middleware-in-your-express-application/" target="_blank" rel="noopener">Setting Up Webpack Dev Middleware in Express</a></p>
+</blockquote>
+<h3 id="styled-component-사용하기"><a href="#styled-component-사용하기" class="headerlink" title="styled-component 사용하기"></a>styled-component 사용하기</h3><p>리엑트는 컴포넌트 방식으로 코드를 모듈화합니다. 그럼 컴포넌트란 무엇을 의미할까요? <strong>저는 html, CSS, JS가 하나로 뭉쳐있어서 그것만 다른 곳에 놓더라도 바로 사용할 수 있는 것이라고 생각합니다.</strong> 하지만 현재의 상태로는 html과 JS는 합쳐 있지만, CSS는 그렇지 않습니다. 여전히 CSS는 다른 파일에서 작업 된 후 적용이 되어야 하죠. 그렇기 때문에 <a href="https://www.styled-components.com/" target="_blank" rel="noopener">styled-component</a>를 사용하기로 했습니다.</p>
+<p>기본적으로 컴포넌트에서 styled-components를 import 해서 사용 할 수 있지만, 서버사이드 렌더링 시에는 추가로 작업해줘야 할 부분이 있습니다.</p>
+<p>‘styled-components’의 <code>ServerStyleSheet</code>를 통해 얻은 sheet 인스턴스의 collectStyles메서드로  렌더링 될 앱에 넘겨주어야 하며 sheet 인스턴스의 <code>getStyleTags()</code> 를 통해 렌더링 될 컴포넌트의 CSS를 얻어 head에 넣어줍니다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">import &#123; renderToString &#125; from 'react-dom/server'</span><br><span class="line">import &#123; createStore &#125; from 'redux'</span><br><span class="line">import &#123; Provider &#125; from 'react-redux'</span><br><span class="line">import reducers from './reducers'</span><br><span class="line">import &#123; ServerStyleSheet &#125; from 'styled-components'</span><br><span class="line"></span><br><span class="line">const store = createStore(reducers, preloadedState)</span><br><span class="line">const sheet = new ServerStyleSheet()</span><br><span class="line">const styles = sheet.getStyleTags()</span><br><span class="line">if (process.env.NODE_ENV === 'development') &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125; else if (process.env.NODE_ENV === 'production')</span><br><span class="line">    res.send(`</span><br><span class="line">        <span class="meta">&lt;!doctype html&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSR Redux styled-components App<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">                $&#123;styles&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'app'</span>&gt;</span>$&#123;renderToString(sheet.collectStyles(<span class="tag">&lt;<span class="name">Provider</span> <span class="attr">store</span>=<span class="string">&#123;store&#125;</span>&gt;</span><span class="tag">&lt;<span class="name">App</span> /&gt;</span><span class="tag">&lt;/<span class="name">Provider</span>&gt;</span>)&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">window</span>.__PRELOADED_STATE__ = $&#123;<span class="built_in">JSON</span>.stringify(preloadedState)&#125;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">'bundle.js'</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br><span class="line">    `)</span><br></pre></td></tr></table></figure>
+<h4 id="프로젝트-구성하기"><a href="#프로젝트-구성하기" class="headerlink" title="프로젝트 구성하기"></a>프로젝트 구성하기</h4><p>어느 정도 환경은 세팅이 되었다는 판단으로 관련 파일들을 어떻게 구성해야 할지 고민이 많았습니다. 대략적인 구조를 오픈소스들을 참고하며 구조를 잡아 보았습니다.</p>
+<ol>
+<li><b>containers, components</b><ul>
+<li>components : 재사용 가능한 컴포넌트들을 관리합니다</li>
+<li>containers : 프로젝트는 단일 페이지로 router 설정이 필요 없었습니다. 하지만 서버에서 IP를 판단해서 그에 따라 다른 페이지가 나와야 하므로 container는 페이지를 나누는 구분으로 사용하였습니다. (원래라면 components 하위에 존재하는 컴포넌트들을 다루는 여러 핸들러나 로직이 있는 컴포넌트를 모아두는 데 주로 사용합니다.)</li>
+</ul>
+</li>
+<li><b>reducers, actions, constants, store</b><ul>
+<li>Redux 에 종속적인 디렉터리입니다.</li>
+<li>reducers: 액션 타입에 따라 store에 직접 접근해 store 값을 수정하는 리듀서 작업을 위치시킵니다.</li>
+<li>actions: dispatch에 넘겨줄 액션 생성자를 정의하거나, dispatch 후 리듀서로 접근 하기 전 값을 컨트롤할 함수를 작성합니다. (이를 위해 redux-thunk 합니다.)</li>
+<li>contants: 액션 타입을 정해놓은 상숫값들을 지정해 놓은 파일을 넣어둡니다. (actionTypes.js)</li>
+<li>store: store 설정 파일이 있습니다. (configureStore.js)</li>
+</ul>
+</li>
+<li><b>API</b><ul>
+<li>server에 직접 API를 호출하는 역할을 합니다.</li>
+</ul>
+</li>
+</ol>
+<h4 id="데이터-플로우"><a href="#데이터-플로우" class="headerlink" title="데이터 플로우"></a>데이터 플로우</h4><ol>
+<li>해당 프로젝트의 containers 단순 IP에 의존한 페이지 구분을 목적으로 합니다.</li>
+<li>store에 저장될 필요 없는 stateless 한 컴포넌트의 경우 API에 직접 접근하여 기능을 수행할 수 있습니다.</li>
+<li>store에 저장되어야 하는 값은 reducer에 action을 넘겨주는 동작을 반드시 수행해야 합니다.<ul>
+<li>이때 서버에 데이터가 있어야 하는 경우 <code>redux-thunk</code>를 활용해서 비동기 처리를 합니다.</li>
+</ul>
+</li>
+</ol>
+<div class="figure center" style="width:;"><img class="fig-img" src="cycle.png" alt=""></div>
+<blockquote>
+<p>참고 :<br><a href="http://huns.me/development/1953" target="_blank" rel="noopener">리덕스(Redux) 애플리케이션 설계에 대한 생각</a></p>
+</blockquote>
+<h4 id="배포-전-닥친-새로운-문제"><a href="#배포-전-닥친-새로운-문제" class="headerlink" title="배포 전 닥친 새로운 문제"></a>배포 전 닥친 새로운 문제</h4><p>맨 처음 프로젝트를 설정할 때 <code>babel-node server.js</code>로 서버를 Run 한다는 생각으로 프로젝트를 구성하였습니다. 하지만 babel-node가 <a href="https://babeljs.io/docs/usage/cli/#babel-node" target="_blank" rel="noopener">‘프로덕션 모드에 사용돼서는 안 된다’</a>는 사실을 알게 되었습니다. 오픈소스 프로젝트들이 production 모드에서 babel-node를 설정한 부분을 정확히 확인하지 않고 그대로 적용한 저의 실수였습니다.</p>
+<div class="figure center" style="width:;"><img class="fig-img" src="areyoukiddingme.gif" alt=""></div>
+<p>오픈소스를 조사하면서 서버사이드 렌더링 시 서버를 Run 하는 방법은 크게 두 가지로 나눌 수 있었습니다.</p>
+<ol>
+<li>babel-node로 서버를 구동한다.</li>
+<li>서버를 채로 번들링 한 후 node로 서버를 구동한다.</li>
+</ol>
+<p>1번 항목은 프로덕션 배포를 앞둔 저에게는 답이 될 수 없었습니다. 그리고 2번 항목은 저에게는 맞지 않았습니다. 해당 프로젝트는 API Server가 따로 없이 express 서버에 API가 같이 존재했으며, 해당 백엔드 작업은 제가 작업하지 않았거니와 백엔드를 잘 모르는 저에게 그 코드를 번들링해버리는 건 무책임한 행동이라고 생각이 들었습니다.</p>
+<p><strong>그래서 저는 생각 끝에 다음과 같은 방식으로 변경을 시도했습니다.</strong></p>
+<ol>
+<li>서버사이드 렌더링시 템플릿 리터럴 형태로 내려주는 파일을 별도의 .html로 추출합니다.<br>이때 기존에 JS들이 들어가는 위치에 특정 형태의 string으로 추가해 놓습니다 (ex: &lt;% data %&gt;</li>
+<li>renderToString 및 store 설정, styled-components 등 페이지 설정 부분을 별도의 .js 추출합니다.</li>
+<li>wepack.config.prod.js에 또 하나의 번들 task를 추가해 위에서 2번에서 작업한 .js파일을 node.js에서 읽을 수 있는 <code>commonjs</code>형태로 번들링 되도록 설정합니다.</li>
+<li>서버에서 페이지를 내려주는 종단에서 .html을 fs로 읽어들이고, 3번에서 번들링된 모듈을 호출해 각각의 값을 읽습니다.</li>
+<li>읽은 .html을 toString().replace() 통해 치환해줍니다.</li>
+</ol>
+<p>결과적으로 제가 원하는 대로 server는 건드리지 않고 렌더링 되는 부분만 번들링해서 사용할 수 있게 되었습니다.</p>
+<blockquote>
+<p>참고 :<br><a href="http://webframeworks.kr/tutorials/react/server-side-rendering/" target="_blank" rel="noopener">React 애플리케이션의 서버 렌더링</a></p>
+</blockquote>
+<h4 id="마무리"><a href="#마무리" class="headerlink" title="마무리"></a>마무리</h4><p>해당 글에는 언급되지 않았지만 이를 제외하고도 많은 문제가 있었고 해결하지 못한 문제들도 많았습니다. 솔직히 말하면 생각했던 방향대로 작업 되지 않아 굴복하고 동작하게끔만 설정해놓은 부분도 더러 있었습니다. 하지만 목표대로 서비스가 되는 프로젝트를 정상적으로 리엑트로 변경하는 작업은 성공이라고 생각됩니다. 시간이 될 때마다 작업한 프로젝트를 손보면서, 새로운 프로젝트에는 또 다른 방식 혹은 더 나은 방식으로 구성해서 작업 해봐야겠습니다. 글이 생각보다 길어져 작업 후 느낀점 같은 부분은 제 기술 블로그가 아닌 개인 블로그에 따로 정리를 해야 할 것 같습니다. 읽어주셔 감사합니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/SSR/">SSR</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/project/">project</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/react/">react</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/styled-components/">styled-components</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/03/01/making-objects-correct/" data-tooltip="객체 바르게 만들기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/11/13/js-closure/" data-tooltip="클로저(closure)란?">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/03/01/making-objects-correct/" data-tooltip="객체 바르게 만들기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/11/13/js-closure/" data-tooltip="클로저(closure)란?">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/02/04/project-react/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2018/02/04/project-react/';
+                 
+                    this.page.identifier = '2018/02/04/project-react/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

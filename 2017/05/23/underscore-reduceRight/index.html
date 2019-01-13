@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Underscore의 _.reduceRight - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,library">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Underscore 의 _.reduceRightv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta name="keywords" content="javascript,library">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Underscore의 _.reduceRight">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Underscore 의 _.reduceRightv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Underscore의 _.reduceRight">
+<meta name="twitter:description" content="Underscore 의 _.reduceRightv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/underscore.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/underscore.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Underscore의 _.reduceRight
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-05-23T09:14:00+09:00">
+	
+		    5월 23, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/underscore/">underscore</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="Underscore-의-reduceRight"><a href="#Underscore-의-reduceRight" class="headerlink" title="Underscore 의 _.reduceRight"></a>Underscore 의 _.reduceRight</h3><p>v1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.</p>
+<a id="more"></a>
+<p>reduceRight는 reduce를 내림차순으로 수행하는 함수입니다.</p>
+<p>[~v0.3.3]</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = <span class="function"><span class="keyword">function</span>(<span class="params">obj, memo, iterator, context</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (obj &amp;&amp; obj.reduceRight) <span class="keyword">return</span> obj.reduceRight(_.bind(iterator, context), memo);</span><br><span class="line">   <span class="keyword">var</span> reversed = _.clone(_.toArray(obj)).reverse();</span><br><span class="line">   _.each(reversed, <span class="function"><span class="keyword">function</span>(<span class="params">value, index</span>) </span>&#123;</span><br><span class="line">     memo = iterator.call(context, memo, value, index, obj);</span><br><span class="line">   &#125;);</span><br><span class="line">   <span class="keyword">return</span> memo;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>기본 reduceRight가 있으면 해당 함수를 사용하도록 합니다.</li>
+<li>조작할 데이터를 _.clone을 통해 복사를 한후 .reverse()를 통해 내림차순으로 돌립니다.</li>
+<li>이후는 reduce와 동일하게 콜백을 수행합니다.</li>
+</ol>
+<hr>
+<p>[~v0.5.1]</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = <span class="function"><span class="keyword">function</span>(<span class="params">obj, memo, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj &amp;&amp; _.isFunction(obj.reduceRight)) <span class="keyword">return</span> obj.reduceRight(_.bind(iterator, context), memo);</span><br><span class="line">  <span class="keyword">var</span> reversed = _.clone(_.toArray(obj)).reverse();</span><br><span class="line">  _.each(reversed, <span class="function"><span class="keyword">function</span>(<span class="params">value, index</span>) </span>&#123;</span><br><span class="line">    memo = iterator.call(context, memo, value, index, obj);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> memo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>reduce함수와 동일하게 같은버전에서 obj에 기본 reduceRight가 있는지 체크하는 방식이 obj.reduceRight _.isFunction(obj.reduceRight)로 변경되었습니다.</li>
+</ol>
+<hr>
+<p>[~v0.6.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = <span class="function"><span class="keyword">function</span>(<span class="params">obj, memo, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) <span class="keyword">return</span> obj.reduceRight(_.bind(iterator, context), memo);</span><br><span class="line">  <span class="keyword">var</span> reversed = _.clone(_.toArray(obj)).reverse();</span><br><span class="line">  <span class="keyword">return</span> _.reduce(reversed, memo, iterator, context);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>native ReduceRight를 체크하는 코드가 추가 및 변경되었습니다.(reduce와 동일합니다.)</li>
+<li>반복문 도는 구간이 _.each에서 _.reduce로 대체되었습니다.</li>
+</ol>
+<hr>
+<p>[~v1.1.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> obj.reduceRight(iterator, memo);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reversed = _.clone(_.toArray(obj)).reverse();</span><br><span class="line">  <span class="keyword">return</span> _.reduce(reversed, iterator, memo, context);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>reduce와 동일하게 argument의 순서가 변경되었습니다.(내부적으로 누적값에 사용되는 memo argument와 interator argument)</li>
+</ol>
+<hr>
+<p>[~v1.1.2]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> obj.reduceRight(iterator, memo);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reversed = (_.isArray(obj) ? obj.slice() : _.toArray(obj)).reverse();</span><br><span class="line">  <span class="keyword">return</span> _.reduce(reversed, iterator, memo, context);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>들어오는 데이터가 배열타입인지 확인후 배열인경우 .slice() 통해 shallow copy로 새로운 배열을 만들고, 배열이 아닌경우 _.toArray로 배열로 변환후 .reverse()를 이용해 내림차순으로 변경합니다.</li>
+<li>foldr란 이름이 생겼습니다.</li>
+</ol>
+<hr>
+<p>[~v1.1.3]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> memo !== <span class="keyword">void</span> <span class="number">0</span> ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reversed = (_.isArray(obj) ? obj.slice() : _.toArray(obj)).reverse();</span><br><span class="line">  <span class="keyword">return</span> _.reduce(reversed, iterator, memo, context);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>기본 reduceRight를 사용할때 초기값(memo)가 있는지 체크합니다.</li>
+</ol>
+<hr>
+<p>[~v.1.1.4]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) obj = [];</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> memo !== <span class="keyword">void</span> <span class="number">0</span> ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reversed = (_.isArray(obj) ? obj.slice() : _.toArray(obj)).reverse();</span><br><span class="line">  <span class="keyword">return</span> _.reduce(reversed, iterator, memo, context);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>null체크가 추가되었습니다.</li>
+</ol>
+<hr>
+<p>[~v1.2.3]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> initial = <span class="built_in">arguments</span>.length &gt; <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) obj = [];</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> reversed = _.toArray(obj).reverse();</span><br><span class="line">  <span class="keyword">if</span> (context &amp;&amp; !initial) iterator = _.bind(iterator, context);</span><br><span class="line">  <span class="keyword">return</span> initial ? _.reduce(reversed, iterator, memo, context) : _.reduce(reversed, iterator);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>초기값인 memo를 판정하는 방법이 reduce와 동일하게 변경되었습니다.</li>
+<li>초기값에 따라 _.reduce를 실행에 필요한 parameter를 다르게 설정합니다.</li>
+</ol>
+<hr>
+<p>[~v1.4.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> initial = <span class="built_in">arguments</span>.length &gt; <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">if</span> (nativeReduceRight &amp;&amp; obj.reduceRight === nativeReduceRight) &#123;</span><br><span class="line">    <span class="keyword">if</span> (context) iterator = _.bind(iterator, context);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">arguments</span>.length &gt; <span class="number">2</span> ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> length = obj.length;</span><br><span class="line">  <span class="keyword">if</span> (length !== +length) &#123;</span><br><span class="line">    <span class="keyword">var</span> keys = _.keys(obj);</span><br><span class="line">    length = keys.length;</span><br><span class="line">  &#125;</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    index = keys ? keys[--length] : --length;</span><br><span class="line">    <span class="keyword">if</span> (!initial) &#123;</span><br><span class="line">      memo = obj[index];</span><br><span class="line">      initial = <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      memo = iterator.call(context, memo, obj[index], index, list);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">if</span> (!initial) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Reduce of empty array with no initial value'</span>);</span><br><span class="line">  <span class="keyword">return</span> memo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>length가 없는경우 obj의 사이즈를 구하여 length를 대신 확인합니다.</li>
+<li>반복문이 적용되는 구간이 기존 _.reduce 대신 each()를 사용해 내림차순으로 순환하고 있습니다.</li>
+</ol>
+<hr>
+<p>[~v1.7.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iteratee, memo, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) obj = [];</span><br><span class="line">  iteratee = createCallback(iteratee, context, <span class="number">4</span>);</span><br><span class="line">  <span class="keyword">var</span> keys = obj.length !== + obj.length &amp;&amp; _.keys(obj),</span><br><span class="line">      index = (keys || obj).length,</span><br><span class="line">      currentKey;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">3</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!index) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(reduceError);</span><br><span class="line">    memo = obj[keys ? keys[--index] : --index];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">while</span> (index--) &#123;</span><br><span class="line">    currentKey = keys ? keys[index] : index;</span><br><span class="line">    memo = iteratee(memo, obj[currentKey], currentKey, obj);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> memo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>다른 반목문들과 동일하게 추후 optimizeCb로 변경되는 createCallback function을 사용하여 callback 처리를 하고 있습니다.</li>
+<li>반복구간이 while로 사용되고 있습니다.</li>
+</ol>
+<hr>
+<p>[~v1.8.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_.reduceRight = _.foldr = createReduce(<span class="number">-1</span>);</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>reduce와 반대로 createReduce에 1이 아닌 -1을 넣어 내림차순으로 reduce를 수행되도록 하고 있습니다.</li>
+</ol>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/underscore-js/">underscore.js</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/06/react-component_style/" data-tooltip="React에서 컴포넌트 스타일링 하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/05/10/underscore-reduce/" data-tooltip="Underscore의 _.reduce">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/06/react-component_style/" data-tooltip="React에서 컴포넌트 스타일링 하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/05/10/underscore-reduce/" data-tooltip="Underscore의 _.reduce">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/05/23/underscore-reduceRight/';
+                 
+                    this.page.identifier = '2017/05/23/underscore-reduceRight/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

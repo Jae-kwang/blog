@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Grunt, Gulp, Webpack - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="Tool,Gulp,Grunt,Browserify,Webpack">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="2017년에 Grunt와 Gulp를 언급하는 이유현재 대세는 단연코 Webpack이라고 할 수 있습니다.하지만 모든 새로운 것들에는 그들이 나오게 된 이유가 있다고 생각됩니다. Webpack을 더 잘 사용하기위해서는 이전 Grunt와 Gulp에 대한 이해가 필요하다는 생각이 들어서 간단히 정리해보려고 합니다.">
+<meta name="keywords" content="Tool,Gulp,Grunt,Browserify,Webpack">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Grunt, Gulp, Webpack">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/03/29/tool-each/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="2017년에 Grunt와 Gulp를 언급하는 이유현재 대세는 단연코 Webpack이라고 할 수 있습니다.하지만 모든 새로운 것들에는 그들이 나오게 된 이유가 있다고 생각됩니다. Webpack을 더 잘 사용하기위해서는 이전 Grunt와 Gulp에 대한 이해가 필요하다는 생각이 들어서 간단히 정리해보려고 합니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.237Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Grunt, Gulp, Webpack">
+<meta name="twitter:description" content="2017년에 Grunt와 Gulp를 언급하는 이유현재 대세는 단연코 Webpack이라고 할 수 있습니다.하지만 모든 새로운 것들에는 그들이 나오게 된 이유가 있다고 생각됩니다. Webpack을 더 잘 사용하기위해서는 이전 Grunt와 Gulp에 대한 이해가 필요하다는 생각이 들어서 간단히 정리해보려고 합니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Grunt, Gulp, Webpack
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-03-29T08:20:33+09:00">
+	
+		    3월 29, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/Tool/">Tool</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="2017년에-Grunt와-Gulp를-언급하는-이유"><a href="#2017년에-Grunt와-Gulp를-언급하는-이유" class="headerlink" title="2017년에 Grunt와 Gulp를 언급하는 이유"></a>2017년에 Grunt와 Gulp를 언급하는 이유</h3><p>현재 대세는 단연코 Webpack이라고 할 수 있습니다.<br>하지만 모든 새로운 것들에는 그들이 나오게 된 이유가 있다고 생각됩니다.</p>
+<p>Webpack을 더 잘 사용하기위해서는 이전 Grunt와 Gulp에 대한 이해가 필요하다는 생각이 들어서 간단히 정리해보려고 합니다.</p>
+<a id="more"></a>
+<h3 id="Grunt와-Gulp"><a href="#Grunt와-Gulp" class="headerlink" title="Grunt와 Gulp"></a>Grunt와 Gulp</h3><p>Grunt와 Gulp는 사람의 실수나 반복적인 작업을 줄이기 위한 자동화 툴(task runner)입니다.</p>
+<p>보통 CSS와 Javascript 파일을 concat, minify, compress, uglify를 하는데 많이 사용되죠,<br>즉 사전에 필요한 반복적인 작업들을 간단한 작업만으로 진행할 수 있습니다.</p>
+<p>또한, 이들은 Node.js에서 사용할 수 있으며 여러 Plugin을 활용 할 수 있습니다</p>
+<h3 id="Grunt-vs-Gulp"><a href="#Grunt-vs-Gulp" class="headerlink" title="Grunt vs Gulp"></a>Grunt vs Gulp</h3><p>위에서 처럼 두가지 툴 모두 같은 작업을 수행하지만, 수행하는 방법은 차이가 있습니다</p>
+<h4 id="설정방법"><a href="#설정방법" class="headerlink" title="설정방법"></a>설정방법</h4><p>Grunt는 설정에 기반하여 동작하는 반면, Gulp는 Javascript를 기반으로 동작합니다.</p>
+<p>아래는 Grunt의 설정 예 입니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grunt는 JSON 형태의 confing를 구성하는 방식으로 구현됩니다</span></span><br><span class="line">imagemin: &#123;</span><br><span class="line">    jpgs: &#123;</span><br><span class="line">        options: &#123;</span><br><span class="line">        progressive: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        files: [&#123;</span><br><span class="line">            expand: <span class="literal">true</span>,</span><br><span class="line">            cwd: <span class="string">'src/img'</span>,</span><br><span class="line">            src: [<span class="string">'*.jpg'</span>],</span><br><span class="line">            dest: <span class="string">'images/'</span></span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>설정파일 기반의 Grunt와 달리 Gulp는 Javascript (Nodejs) 코딩을 할 줄 아는 사람이면 쉽게 접근할 수 있는 것이 장점인것 같습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Gulp는 javascript를 사용합니다.</span></span><br><span class="line">gulp.task(<span class="string">'jpgs'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gulp.src(<span class="string">'src/images/*.jpg'</span>)</span><br><span class="line">    .pipe(imagemin(&#123; <span class="attr">progressive</span>: <span class="literal">true</span> &#125;))</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'optimized_images'</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="속도"><a href="#속도" class="headerlink" title="속도"></a>속도</h4><p>Gulp와 Grunt의 속도의 차이를 이해하기 위해서는 둘의 처리 방식이 다르다는걸 알아야 합니다.</p>
+<p>Gulp는 스트림(Stream)을 기반으로 하는 빌드 시스템 입니다. 스트림을 이용해 데이터를 읽고 출력하며 작업들을 메모리에서 처리합니다. 즉, 요청 후 한번에 결과를 받는 것이 아니라 이벤트 중간중간 전달받아 작업을 하기 때문에 비교적 작업속도가 빠릅니다.</p>
+<blockquote>
+<p>스트림(Stream)이란?<br>  데이터의 입, 출력시 비동기적으로 처리될 수 있는 데이터의 연속된 흐름으로써, Node.js에서는 이 스트림을 읽고 쓸 수 있습니다.</p>
+</blockquote>
+<p>또한 Gulp는 동시에 여러 작업을 처리 할 수 있지만 Grunt는 일반적으로 한 번에 하나의 작업 만 처리합니다.</p>
+<blockquote>
+<p>출처 :</p>
+<ul>
+<li><a href="http://tech.tmw.co.uk/2014/01/speedtesting-gulp-and-grunt/" target="_blank" rel="noopener">Speedtesting gulp.js and Grunt</a></li>
+<li><a href="http://juhoi.github.io/post/%EB%B2%88%EC%97%AD%5D-introduction-to-node-dot-j-s-streams/" target="_blank" rel="noopener">Introduction to Node.js Streams</a></li>
+</ul>
+</blockquote>
+<h4 id="결론"><a href="#결론" class="headerlink" title="결론"></a>결론</h4><p>Gulp가 Grunt보다 속다가 빠르다는건 맞지만, 사용의 편의성 또한 무시할 수 있는 부분이 아니기에 무엇이 자신에게 맞는지를 잘 파악해서 사용하는게 좋은것 같습니다.</p>
+<blockquote>
+<p>출처 :</p>
+<ul>
+<li><a href="https://www.keycdn.com/blog/gulp-vs-grunt/" target="_blank" rel="noopener">Gulp vs Grunt – Comparing Both Automation Tools</a></li>
+<li><a href="https://jaysoo.ca/2014/01/27/gruntjs-vs-gulpjs/" target="_blank" rel="noopener">Grunt vs Gulp - Beyond the Numbers</a></li>
+<li>etc…</li>
+</ul>
+</blockquote>
+<h3 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h3><p>Gulp와 Grunt와 같은 자동화 도구덕분에 많은 작업의 양이 줄었는데도 불구하고 Webpack이 나왔습니다. 이런 자동화도구에서 어떤 부분이 불편했던 것이었을까요? 우선 Webpack은 모듈 번들러이고 Gulp와 Grunt는 task runners입니다.</p>
+<p>결론부터 말하자면 Webpack이 이들을 1:1로 대체된다기 보다 이 기능이 포함되어 있고 더 많은 작업을 할 수 있기 때문에 이 도구를 쓰는것입니다. webpack은 Browserify와 같은 의존성 관리 기능까지 포함하고 있으니 “webpack = (Grunt || Gulp) + Browserify” 이게 될텐데 안 쓸 이유가 없을 것입니다. 게다가 속도까지 더 빠르니까요.</p>
+<h4 id="우선-Browserify"><a href="#우선-Browserify" class="headerlink" title="우선 Browserify?"></a>우선 Browserify?</h4><p>Browserify 는 Node.js 기반 javascript code 를 브라우저 환경에서도 실행 가능하도록 해줍니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">var</span> foo = <span class="built_in">require</span>(<span class="string">'./helpers/foo'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> <span class="title">bar</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'bar'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>즉, 브라우저와 Node.js의 코드를 동일하게 사용할 수 있습니다.</p>
+<p>하지만 브라우저에서 작업결과를 봐야하기 때문에 매번 코드를 컴파일이 해야하는데, 코드의 양이 많아지면 하나 수정하는데도 엄청 오래걸릴 수 있다는 얘기가 됩니다.</p>
+<p>참고한 블로그를 보면 webpack을 사용해 watch한 경우 빌드시간이 20초 0.1 ~ 0.3으로 단축되었다는 글을 볼 수 있었습니다.</p>
+<p>실제로 정확히 이해하고 적용하는데는 시간이 걸리겠지만, 좋은 부분이 있다는 건 확실히 이해해야 할것 같습니다.</p>
+<blockquote>
+<p>출처 :</p>
+<ul>
+<li><a href="https://ironhee.com/2015/06/06/webpack-%EB%AA%A8%EB%93%88%ED%99%94%EC%99%80-%EC%86%8D%EB%8F%84%EB%A5%BC-%EB%AA%A8%EB%91%90-%EC%9E%A1%EB%8A%94-%EB%B0%A9%EB%B2%95/" target="_blank" rel="noopener">Webpack – 모듈화와 속도를 모두 잡는 방법.</a></li>
+<li><a href="https://www.toptal.com/front-end/webpack-browserify-gulp-which-is-better" target="_blank" rel="noopener">Webpack or Browserify &amp; Gulp: Which Is Better?</a></li>
+<li>etc…</li>
+</ul>
+</blockquote>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/Tool/">Tool</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/04/24/underscore-each/" data-tooltip="Underscore의 _.each">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/02/15/js-map_reduce/" data-tooltip="filter, map 그리고 reduce">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/04/24/underscore-each/" data-tooltip="Underscore의 _.each">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/02/15/js-map_reduce/" data-tooltip="filter, map 그리고 reduce">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/03/29/tool-each/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/03/29/tool-each/';
+                 
+                    this.page.identifier = '2017/03/29/tool-each/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

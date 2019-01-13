@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Bootstrap의 tap plugins 분석 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,library">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Bootstrap의 tabs 코드 분석Bootstrap은 plugin을 생성할때 코드를 어떻게 구조화하는지 tab plugin을 통해 분석해보며 이해해 봅니다. 버전은 v3.3.2을 사용합니다.">
+<meta name="keywords" content="javascript,library">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Bootstrap의 tap plugins 분석">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Bootstrap의 tabs 코드 분석Bootstrap은 plugin을 생성할때 코드를 어떻게 구조화하는지 tab plugin을 통해 분석해보며 이해해 봅니다. 버전은 v3.3.2을 사용합니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bootstrap의 tap plugins 분석">
+<meta name="twitter:description" content="Bootstrap의 tabs 코드 분석Bootstrap은 plugin을 생성할때 코드를 어떻게 구조화하는지 tab plugin을 통해 분석해보며 이해해 봅니다. 버전은 v3.3.2을 사용합니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/bootstrap.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/bootstrap.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Bootstrap의 tap plugins 분석
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-10-11T09:10:00+09:00">
+	
+		    10월 11, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/bootstrap/">bootstrap</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="Bootstrap의-tabs-코드-분석"><a href="#Bootstrap의-tabs-코드-분석" class="headerlink" title="Bootstrap의 tabs 코드 분석"></a>Bootstrap의 tabs 코드 분석</h3><p>Bootstrap은 plugin을 생성할때 코드를 어떻게 구조화하는지 tab plugin을 통해 분석해보며 이해해 봅니다.</p>
+<p>버전은 v3.3.2을 사용합니다.</p>
+<a id="more"></a>
+<h3 id="코드-분석의-목적"><a href="#코드-분석의-목적" class="headerlink" title="코드 분석의 목적"></a>코드 분석의 목적</h3><p>현재 export, import 혹은 require와 같은 방법을 통해 module이나 component를 효율적으로 나눠서 사용하고 있습니다.</p>
+<p>그렇다면 위의 기능들이 없었을때는 어떻게 효율적으로 코드를 분할할 수 있었을까요?</p>
+<p>만약 코드 구조가 현재 지원하고 있는 방식이 아니라 다른방식일 경우 어떻게 사용할 수 있을지 알기 위함입니다.</p>
+<h3 id="Bootstrap의-함수"><a href="#Bootstrap의-함수" class="headerlink" title="Bootstrap의 함수"></a>Bootstrap의 함수</h3><p>기본적으로 Bootstrap은 plugin을 구현시 <code>생성자 패턴</code>과 <code>프로토타입 패턴</code>을 적용해서 구현하고 있습니다.</p>
+<p>패턴 적용시 자신만의 인스턴스를 가지면서도 참조 방식을 통해 메서드를 공유해 메모리를 절약할 수 있습니다.</p>
+<p>Bootstrap은 다음과 같이 익명함수로 모든 기능을 정의해서 스코프가 섞이지 않도록 합니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+<span class="function"><span class="keyword">function</span> (<span class="params">$</span>) </span>&#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;(jQuery);</span><br></pre></td></tr></table></figure>
+<p>여기서 <code>+</code> 다음에 나오는 부분을 파서는 표현식으로 처리하며, 위와 같이 즉시 실행함수에서 사용됩니다.</p>
+<p>만약, <code>+</code>가 없는 상태라면 파서가 <code>function</code>을 함수 표현식이 아닌 선언식으로 인식하여 뒤에 나오는 <code>()</code>가 오류로 처리됩니다.</p>
+<blockquote>
+<p>참고 : <a href="https://stackoverflow.com/questions/13341698/javascript-plus-sign-in-front-of-function-name/13341710" target="_blank" rel="noopener">https://stackoverflow.com/questions/13341698/javascript-plus-sign-in-front-of-function-name/13341710</a></p>
+</blockquote>
+<h3 id="이벤트-바인딩"><a href="#이벤트-바인딩" class="headerlink" title="이벤트 바인딩"></a>이벤트 바인딩</h3><p>jQuery의 ‘on’을 API 통해 이벤트를 등록하고 있습니다.</p>
+<p>여기서 ‘이벤트 위임(Event Delegation)’ 방식으로 이벤트를 등록하고 있습니다. </p>
+<div class="alert info"><p><strong>이벤트 위임(Event Delegation)</strong><br>이벤트 위임은 이벤트 버블링의 장점을 활용하여, 이벤트 헨들러를 하나만 할당해서 해당 타입의 이벤트를 모두 처리하는 테크닉입니다. DOM요소 하나에만 접근해 거기에만 이벤트 핸들러를 할당하므로 비용이 훨씬 적으며, 메모리를 훨씬 조금 사용합니다.</p>
+</div>
+<p>이벤트 위임의 또 하나의 장점은 동적으로 생성되는 요소에 일일이 이벤트를 할당할 필요가 없다는 점입니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>)</span><br><span class="line">  .on(<span class="string">'click.bs.tab.data-api'</span>, <span class="string">'[data-toggle="tab"]'</span>, clickHandler)</span><br><span class="line">  .on(<span class="string">'click.bs.tab.data-api'</span>, <span class="string">'[data-toggle="pill"]'</span>, clickHandler)</span><br></pre></td></tr></table></figure>
+<p>이벤트 대상은 ‘[data-toggle=”tab”]’와 ‘[data-toggle=”pill”]’이며, 이벤트 처리는 ‘clickHandler’에서 진행됩니다.</p>
+<p>이때 걸려 있는 이벤트는 ‘click’ 이벤트로, 이 이벤트는 ‘bs, tab, data-api’라는 namespace를 갖습니다.</p>
+<h3 id="이벤트-핸들러"><a href="#이벤트-핸들러" class="headerlink" title="이벤트 핸들러"></a>이벤트 핸들러</h3><p>이벤트에 대한 이벤트 처리가 이루어집니다. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clickHandler = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  e.preventDefault()</span><br><span class="line">  Plugin.call($(<span class="keyword">this</span>), <span class="string">'show'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>엘리먼트의 e.preventDefault()를 통해 기본기능을 막고, 선언된 Tab Plugin을 .call()로 ‘show’를 호출하며 현재 ‘this’를 교체합니다.</p>
+<h3 id="탭-플러그인-정의"><a href="#탭-플러그인-정의" class="headerlink" title="탭 플러그인 정의"></a>탭 플러그인 정의</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Plugin</span>(<span class="params">option</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $<span class="keyword">this</span> = $(<span class="keyword">this</span>)</span><br><span class="line">    <span class="keyword">var</span> data  = $<span class="keyword">this</span>.data(<span class="string">'bs.tab'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!data) $<span class="keyword">this</span>.data(<span class="string">'bs.tab'</span>, (data = <span class="keyword">new</span> Tab(<span class="keyword">this</span>)))</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> option == <span class="string">'string'</span>) data[option]()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>우선, 대상되는 요소의 data정보에 ‘bs.tab’이 있는지 확인하는 작업을 하는데 이는 이전에 이벤트가 바인딩 되어 있는지 체크하는 작업입니다.</p>
+<p>만약 이벤트가 바인딩이 되어 있지 않다면 선언된 Tab을 new 통해 인스턴스를 생성하여 해당 요소의 data에 ‘bs.tab’의 값으로서 할당합니다.</p>
+<p><strong>이 작업은 이벤트가 바인딩 되어있는지를 확인하는 flag로써 활용할 수 있으며, 실제로 기능을 하는 함수로 사용됩니다.</strong></p>
+<p>마지막으로 option으로 넘어온 ‘show’를 실행시킵니다. (data.show())</p>
+<h3 id="jQuery-Plugin-설정"><a href="#jQuery-Plugin-설정" class="headerlink" title="jQuery Plugin 설정"></a>jQuery Plugin 설정</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> old = $.fn.tab</span><br><span class="line"></span><br><span class="line">$.fn.tab             = Plugin</span><br><span class="line">$.fn.tab.Constructor = Tab</span><br><span class="line"></span><br><span class="line">$.fn.tab.noConflict = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  $.fn.tab = old</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>jQuery의 Plugin을 설정시 $.fn에 연결합니다. jQuery에서는 이부분에 연결된 기능을 prototype으로 연결시킵니다.</p>
+<p>다음으로는 Constructor에 연결합니다. 그 이유는 일부 동일한 다른 함수의 경우 (popover의 경우에는 tooptip을 상속받아서 사용)에는 다른 기능을 상속받아 사용하기 때문에 어떤 유형인지 확인이 어렵습니다. 그래서 Constructor를 사용해 어떤 유형인지 확인하는데 사용될 수 있습니다.</p>
+<blockquote>
+<p>참고 : <a href="https://stackoverflow.com/questions/19680895/bootstrap-constructor" target="_blank" rel="noopener">https://stackoverflow.com/questions/19680895/bootstrap-constructor</a></p>
+</blockquote>
+<p>$.fn.tab.noConflict를 사용해 이전에 $.fn.tab에 사용되고 있었던 플러그인을 사용할 수 있습니다. (예전에 동일한 이름으로 플러그인을 사용하고 있다는 가정하에)</p>
+<h3 id="탭-클래스-정의"><a href="#탭-클래스-정의" class="headerlink" title="탭 클래스 정의"></a>탭 클래스 정의</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Tab = <span class="function"><span class="keyword">function</span> (<span class="params">element</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.element = $(element)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Tab.VERSION = <span class="string">'3.3.2'</span></span><br><span class="line"></span><br><span class="line">Tab.TRANSITION_DURATION = <span class="number">150</span></span><br><span class="line"></span><br><span class="line">Tab.prototype.show = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line">Tab.prototype.activate = <span class="function"><span class="keyword">function</span> </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>부트스랩은 프로토타입 상속에 의해 기능들이 정의 되어 있습니다.</p>
+<p>인스턴스를 생성하기위한 Tab 클래스를 생성하고, 필요한 상수를 선언하며, 기능들을 prototype에 추가합니다.</p>
+<p>앞서 설명된 플러그인에서 탭 플러그인 설정에서 사용되는 클래스 입니다.</p>
+<p>Tab.prototype.show에서는 요소를 노출하기 위한 action을 trigger하는 기능들을 모아놓았으며,</p>
+<p>Tab.prototype.activate에서는 실제 요소를 활성화 시키는 .active 클래스를 컨트롤 합니다.</p>
+<h3 id="마치며"><a href="#마치며" class="headerlink" title="마치며"></a>마치며</h3><p><strong>“높은 응집도 낮은 결합도”</strong>에 대한 이해가 조금이나마 와닿은것 같습니다.<br>예전에는 머리로 이했었던 느낌이지만 요즘은 이런게 필요하구나 라는 것을 직접 느끼고 있는것 같습니다.</p>
+<p>사실 디자인 패턴을 공부하면서 직접 적용해서 작업하는건 쉽지 않는다고 판단이 들어서,<br>유명한 라이브러리들을 조금씩 열어보면서 이들은 어떤식으로 구조화를 했었고, 어떻게 진화하고 있는지 알아보려고 했습니다.</p>
+<p>우선 제가 가장 많이 쓰고 있는 것중에 하나인 bootstrap중에서 가장 짧은 tab을 살펴 보았습니다.<br>더 공부해야겠지만, 이러한 방식을 더 잘 이해하면 현재 사용되는 모듈 방식을 좀 더 잘 사용할 수 있지 않을까 생각됩니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/bootstrap-js/">bootstrap.js</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/10/16/form-vs-ajax/" data-tooltip="form 전송과 ajax 전송">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-2/" data-tooltip="Under-the-hood-ReactJS(2) - 업데이트">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/10/16/form-vs-ajax/" data-tooltip="form 전송과 ajax 전송">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-2/" data-tooltip="Under-the-hood-ReactJS(2) - 업데이트">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/10/11/bootstrap-tab/';
+                 
+                    this.page.identifier = '2017/10/11/bootstrap-tab/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

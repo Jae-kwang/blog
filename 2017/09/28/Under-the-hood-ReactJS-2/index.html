@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Under-the-hood-ReactJS(2) - 업데이트 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="react">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Under-the-hood-ReactJS의 파트 8~10인 업데이트 관련 부분입니다.">
+<meta name="keywords" content="react">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Under-the-hood-ReactJS(2) - 업데이트">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Under-the-hood-ReactJS의 파트 8~10인 업데이트 관련 부분입니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Under-the-hood-ReactJS(2) - 업데이트">
+<meta name="twitter:description" content="Under-the-hood-ReactJS의 파트 8~10인 업데이트 관련 부분입니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/react.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/react.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Under-the-hood-ReactJS(2) - 업데이트
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-09-28T09:18:00+09:00">
+	
+		    9월 28, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/react/">react</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>Under-the-hood-ReactJS의 파트 8~10인 업데이트 관련 부분입니다.</p>
+<a id="more"></a>
+<h3 id="파트-8"><a href="#파트-8" class="headerlink" title="파트 8"></a>파트 8</h3><h4 id="this-setState"><a href="#this-setState" class="headerlink" title="this.setState"></a>this.setState</h4><div class="alert info"><p>인트로에서도 언급되었듯 업데이트의 시작은 <strong>this.setState</strong>에서 부터 다뤄집니다.</p>
+</div>
+<ul>
+<li>setState는 <code>ReactComponent</code>에서 컴포넌트를 상속받았고, <code>updater</code> 속성을 받습니다. (파트3)</li>
+<li>각 컴포넌트는 자신의 pandding state의 목록을 가지고 있고, 하나의 트랜잭션에서 setState를 호출 할 때마다 그 객체를 대기열에 넣은 다음 나중에 하나씩 컴포넌트 state로 머지합니다.</li>
+<li>setState를 호출하여, 컴포넌트를 dirtyComponents 리스트에 추가 할 수 있습니다.<ul>
+<li>dirtyComponents는 변경된 항목들을 비교하기위해 넣어두는 리스트 입니다. (파트 10)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-9"><a href="#파트-9" class="headerlink" title="파트 9"></a>파트 9</h3><h4 id="setState-메소드가-호출되는-두가지-경우"><a href="#setState-메소드가-호출되는-두가지-경우" class="headerlink" title="setState 메소드가 호출되는 두가지 경우"></a>setState 메소드가 호출되는 두가지 경우</h4><ul>
+<li>마우스 이벤트에 의한 호출<ul>
+<li>마우스 이벤트가 발생하면 앞서 살펴본 것처럼 여러 레이어를 통해 일괄(batched)업데이트 되는데, ReactReconcileTransaction 래퍼가 비활성화되고 이후 ReactEventListener enabled때 다시 발생될때 안전하게 마운팅됩니다. (파트 2)</li>
+</ul>
+</li>
+<li>setTimeout에 의한 호출<ul>
+<li>setTimeout의 경우에도 위의 경우와 다르지 않게 트랜잭션이 아직 오픈되지 않았을 경우 일괄(batching) 트렌젝션 열고 dirtyComponents리스트에 영향받은 컴포넌트 추가하고 트렌젝션을 close(ReactUpdates.flushBatchedUpdates)하고 dirtyComponents를 처리합니다.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-10"><a href="#파트-10" class="headerlink" title="파트 10"></a>파트 10</h3><h4 id="Dirty-components"><a href="#Dirty-components" class="headerlink" title="Dirty components"></a>Dirty components</h4><ul>
+<li>dirtyComponents리스트를 처리하기 위해 루프를 수행합니다.</li>
+<li>이때 ReactUpdates.runBatchedUpdates 호출합니다.<ul>
+<li>새로운 또 하나의 트렌젝션 <strong>ReactUpdatesFlushTransaction 래퍼</strong> 사용</li>
+<li>dirtyComponentsLength가 변경된 경우 flushBatchedUpdates를 통해 한번 더 수행</li>
+</ul>
+</li>
+<li>ReactUpdatesFlushTransaction 래퍼(dirtyComponents 배열을 지우고, 마운트 준비 핸들러(예: componentDidUpdate)가 대기열에 추가 한 모든 업데이트를 수행)<ul>
+<li>dirtyComponets배열 정렬(mount order)</li>
+<li>dirtyComponentsLength을 기준으로 반복해서 수행.</li>
+<li>각 컴포넌트를 ReactReconciler.performUpdateIfNecessary로 전달.<ul>
+<li>실제로 performUpdateIfNecessary메소드는 ReactCompositeComponent.updateComponent에서 호출합니다.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-11"><a href="#파트-11" class="headerlink" title="파트 11"></a>파트 11</h3><h4 id="Update-component"><a href="#Update-component" class="headerlink" title="Update component"></a>Update component</h4><ul>
+<li>setState가 호출되거나 props가 변경된 경우 updateComponent 메소드가 호출될 수 있습니다.</li>
+<li>pending state queue기반으로 nextState를 비교합니다. (예제 에서의 {message : “click state message”})</li>
+<li>shouldUpdate를 디폴트값 true로 설정<ul>
+<li>실제로 <code>shouldComponentUpdate</code>가 지정되지 않은 경우에도 컴포넌트가 기본적으로 업데이트되는 이유</li>
+</ul>
+</li>
+<li>강제 업데이트인지 확인<ul>
+<li>강제 업데이트가 아닌경우 <code>shouldComponentUpdate</code> 메소드가 호출되어 <code>shouldUpdate</code>의 결과 값으로 재할당됩니다.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-12"><a href="#파트-12" class="headerlink" title="파트 12"></a>파트 12</h3><h4 id="실제로-컴포넌트를-업데이트하는-경우"><a href="#실제로-컴포넌트를-업데이트하는-경우" class="headerlink" title="실제로 컴포넌트를 업데이트하는 경우"></a>실제로 컴포넌트를 업데이트하는 경우</h4><ul>
+<li><p><code>componentWillUpdate</code>가 명시되어 있다면 그것을 호출합니다.</p>
+</li>
+<li><p>컴포넌트를 리랜더링합니다.</p>
+<ul>
+<li>컴포넌트의 render 메소드를 호출하고, 그에 따라 DOM을 업데이트 합니다.</li>
+<li>이전에 렌더링된 엘리먼트와 비교하여 DOM을 실제로 업데이트해 하는지 확인합니다.(update or replace completely)<ul>
+<li>shouldUpdateReactComponent(중복된 DOM 업데이트를 피하고 리엑트 성능을 향상)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>componentDidUpdate</code> 호출을 대기열에 추가합니다.</p>
+</li>
+</ul>
+<hr>
+<h3 id="파트-13"><a href="#파트-13" class="headerlink" title="파트 13"></a>파트 13</h3><h4 id="Receive-component"><a href="#Receive-component" class="headerlink" title="Receive component"></a>Receive component</h4><ul>
+<li><p>shouldUpdateReactComponent -&gt; ReactReconciler.receiveComponent -&gt; ReactDOMComponent.receiveComponent</p>
+<ul>
+<li>위와 같은 형태로 다음 엘리먼트 전달합니다.</li>
+</ul>
+</li>
+<li><p>DOM 컴포넌트 인스턴스에 전달받은 엘리먼트를 할당하고 update 메소드를 호출합니다.</p>
+</li>
+<li><p>updateComponent 메소드는 실제로 prev와 next props를 기반으로 2가지 동작을 수행합니다.</p>
+<ul>
+<li>DOM properties 업데이트 : _updateDOMProperties(파트 5)</li>
+<li>DOM children 업데이트 : _updateDOMChildren(파트 14)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="파트-14"><a href="#파트-14" class="headerlink" title="파트 14"></a>파트 14</h3><h4 id="updateDOMChildren"><a href="#updateDOMChildren" class="headerlink" title="_updateDOMChildren"></a>_updateDOMChildren</h4><ul>
+<li><p>‘ExampleApplication’는 button, ChildCmp, text string를 자식으로 가지고 있습니다.</p>
+</li>
+<li><p>해당 컴포넌트의 자식이 ‘content’형태인지 ‘complex’형태 인지 판단합니다.</p>
+<ul>
+<li>complex : 리엑트 컴포넌트</li>
+<li>content : 문자열이나 숫자와 같은 단순타입</li>
+</ul>
+</li>
+<li><p>complex인 경우</p>
+<ul>
+<li>부모 컴포넌트는 이전에 수행했던 시나리오와 동일한 시나리오를 통해 자식들을 전달합니다.</li>
+<li>‘content’ 레벨에 도달할때까지 여러번 작업을 반복합니다.</li>
+</ul>
+</li>
+<li><p>content인 경우</p>
+<ul>
+<li>이전과 현재 텍스트가 같은지 비교하고 수정되었다면 업데이트 합니다.(replace)</li>
+<li>텍스트 업데이트인 경우 setTextContent를 호출해 HTML노드의 내용을 수정합니다.</li>
+<li>콘텐츠가 업데이트되고 페이지에서 사용자를 위해 리렌더링됩니다.</li>
+</ul>
+</li>
+<li><p>이전에 대기열에 넣어두었던 <code>componentDidUpdate</code>를 호출합니다. (파트 12)</p>
+<ul>
+<li><code>componentDidUpdate</code>를 호출할 수 있는 이유<ul>
+<li>dirty 컴포넌트 업데이트는 ReactUpdatesFlushTransaction로 래핑되었고, 래퍼 중 하나는 실제로 this.callbackQueue.notifyAll() 로직을 포함하므로 <code>componentDidUpdate</code>를 호출되는 것입니다. (파트 10)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>저는 이 글들을 번역하고 공부하면서도 실제로 100% 이해했다고는 말할 수 없었습니다. 다만 제가 리엑트 이해도를 100%로 정했을때 스스로의 이해도가 10%정도의 수준이라면 15%정도 되지 않았을까라는 생각정도만 가지고 있습니다.</p>
+<p>그 이유로는, 저는 무언가를 읽고 학습할때 글보다는 코드로 이해하는게 훨씬 이해도가 높습니다. 그래서 제가 처음보는 말들보다는 익숙한 예약어들이 많이 등장할때 훨씬 이해가 잘되는 느낌이었습니다.</p>
+<p>그 예약어로는 라이프사이클 메소드를 들 수가 있었고, 제가 가지고 있는 라이프사이클 순서 사이사이에 위에서 알아본 일련의 과정들을 집어넣어보면서 이해했던것 같습니다.</p>
+<p>제법 오랜시간동안 이거 한다고 다른걸 안하고 있었으니, 이제는 실제로 써먹을 수 있을지 간단히 리엑트 프로젝트를 한번 해봐야겠습니다!</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/react/">react</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/10/11/bootstrap-tab/" data-tooltip="Bootstrap의 tap plugins 분석">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-1/" data-tooltip="Under-the-hood-ReactJS(1) - 마운트">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/10/11/bootstrap-tab/" data-tooltip="Bootstrap의 tap plugins 분석">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-1/" data-tooltip="Under-the-hood-ReactJS(1) - 마운트">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/09/28/Under-the-hood-ReactJS-2/';
+                 
+                    this.page.identifier = '2017/09/28/Under-the-hood-ReactJS-2/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

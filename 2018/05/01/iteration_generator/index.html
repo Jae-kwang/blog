@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Iteration &amp; Generator - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,ES6,interface,iterator,iterable">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="ES6의 Iteration &amp;amp; Generator에 대하여 알아봅니다.">
+<meta name="keywords" content="javascript,ES6,interface,iterator,iterable">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Iteration &amp; Generator">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="ES6의 Iteration &amp;amp; Generator에 대하여 알아봅니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.219Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Iteration &amp; Generator">
+<meta name="twitter:description" content="ES6의 Iteration &amp;amp; Generator에 대하여 알아봅니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Iteration &amp; Generator
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-05-01T16:57:22+09:00">
+	
+		    5월 01, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/ES6/">ES6</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>ES6의 Iteration &amp; Generator에 대하여 알아봅니다.</p>
+<a id="more"></a>
+<p>우선, Iteration &amp; Generator를 알아보기에 앞서 Interface에서 대하여 알아보도록 하겠습니다.</p>
+<h4 id="Interface"><a href="#Interface" class="headerlink" title="Interface"></a>Interface</h4><p>우선, Javascript에서의 Interface는 고유명사입니다.<br>다른 언어에서 말하는 Interface와는 아무 상관이 없습니다.</p>
+<p><strong>ES6에서의 Interface의 정의</strong></p>
+<ol>
+<li>Interface란 사양에 맞는 값과 연결된 속성키의 세트.</li>
+<li>어떤 Object라도 Interface의 정의를 충족시킬 수 있다.</li>
+<li>하나의 Object는 여러 개의 Interface를 충족시킬 수 있다.</li>
+</ol>
+<blockquote>
+<p><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-iteration" target="_blank" rel="noopener">http://www.ecma-international.org/ecma-262/6.0/#sec-iteration</a></p>
+</blockquote>
+<p>예를 들어 Interface ‘TEST’를 만들어 보겠습니다.</p>
+<p><strong>Interface ‘TEST’의 요구 사항</strong></p>
+<ol>
+<li>‘test’라는 키를 가진다.</li>
+<li>‘test’에는 함수가 있으며, 문자열 인자를 한 개 받고, Boolean 값을 반환한다.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="comment">// TEST'Interface 를 만족하는 object의 형태</span></span><br><span class="line">  test(str) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// class를 활용한 정의에서도 Interface를 만족하게 하면,</span></span><br><span class="line"><span class="comment">// 그 인스턴스들은 자동으로 원래의 Interface의 요구사항을 만족한다.</span></span><br><span class="line"><span class="keyword">const</span> Test = <span class="class"><span class="keyword">class</span> </span>&#123;</span><br><span class="line">  test(str) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> test = <span class="keyword">new</span> Test();</span><br></pre></td></tr></table></figure>
+<p><strong>덕 타이핑(duck typing)</strong><br>class Test가 test Interface 조건만 만족한다면 test Interface의 구상체로 볼 수 있습니다.<br>덕 타이핑을 쓰는 이유는 런타임에는 컴파일타임의 타입체크가 되지 않기 때문입니다.<br>즉, Javascript에서 말하는 Interface는 덕 타이핑으로 구현을 약속한 프로토콜 같은 것이라고 볼 수 있습니다.</p>
+<h4 id="Iterator-Interface"><a href="#Iterator-Interface" class="headerlink" title="Iterator Interface"></a>Iterator Interface</h4><p>Javascript 스펙에는 미리 규정된 Interface들이 있습니다.<br>그 중 Iterator Interface를 살펴보겠습니다.</p>
+<p><strong>Iterator Interface의 요구 사항</strong></p>
+<ol>
+<li>next라는 키를 가진다.</li>
+<li>next에는 함수가 있으며, 인자를 받지 않고 <code>iteratorResultObject</code>를 반환한다.</li>
+<li><code>iteratorResultObject</code>는 <code>value</code>와 <code>done</code>이라는 키를 갖고 있다.(interface)</li>
+<li>이중 <code>done</code>은 계속 반복할 수 있을지 없을지에 따라 Boolean 값을 반환한다.<br><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-iterator-interface" target="_blank" rel="noopener">http://www.ecma-international.org/ecma-262/6.0/#sec-iterator-interface</a> </li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> iterator = &#123; <span class="comment">// iterator Interface를 만족하는 object의 형태</span></span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="comment">// Interface iteratorResultObject를 만족하는 object의 형태</span></span><br><span class="line">      done: <span class="literal">true</span>,</span><br><span class="line">      value: <span class="number">1</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 데이터를 갖는 iterator 활용 예제 </span></span><br><span class="line"><span class="keyword">const</span> iterator = &#123;</span><br><span class="line">  data: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; </span><br><span class="line">      done: <span class="keyword">this</span>.data.length === <span class="number">0</span>,</span><br><span class="line">      value: <span class="keyword">this</span>.data.pop()</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// iterator 수행 </span></span><br><span class="line"><span class="keyword">let</span> iResult = iterator.next()</span><br><span class="line"><span class="built_in">console</span>.log(iResult.value + <span class="string">':'</span> + iResult.done); <span class="comment">// 4:false</span></span><br><span class="line">iResult = iterator.next()</span><br><span class="line"><span class="built_in">console</span>.log(iResult.value + <span class="string">':'</span> + iResult.done); <span class="comment">// 3:false</span></span><br><span class="line">iResult = iterator.next()</span><br><span class="line"><span class="built_in">console</span>.log(iResult.value + <span class="string">':'</span> + iResult.done); <span class="comment">// 2:false</span></span><br><span class="line">iResult = iterator.next()</span><br><span class="line"><span class="built_in">console</span>.log(iResult.value + <span class="string">':'</span> + iResult.done); <span class="comment">// 1:false</span></span><br><span class="line">iResult = iterator.next()</span><br><span class="line"><span class="built_in">console</span>.log(iResult.value + <span class="string">':'</span> + iResult.done); <span class="comment">// undefined:true</span></span><br><span class="line"><span class="comment">// value가 없으면 undefined를 return하고 done은 true가 된다.</span></span><br></pre></td></tr></table></figure>
+<p>이렇게 Iterator Interface을 적용하여 iterator object를 만들어 보았고,<br>반복수행을 해보았습니다. 다음은 Iterable Interface에 대하여 알아보겠습니다. </p>
+<h4 id="Iterable-Interface"><a href="#Iterable-Interface" class="headerlink" title="Iterable Interface"></a>Iterable Interface</h4><p><strong>Iterable Interface의 요구 사항</strong></p>
+<ol>
+<li>Symbol.iterator라는 키를 갖는다.</li>
+<li>Symbol.iterator에는 함수가 있으며, 인자를 받지 않고 iterator object를 반환한다. </li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> iterable = &#123; <span class="comment">// iterable Interface를 만족하는 object의 형태</span></span><br><span class="line">  [<span class="built_in">Symbol</span>.iterator]() &#123;</span><br><span class="line">    <span class="keyword">return</span> iterator; <span class="comment">// iterator object</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>iterator는 한번 반복 후에는 수명을 다해서 없어집니다.<br>그래서 원본을 그대로 둔 상태에서 계속 반복 가능한 객체를 새롭게 얻기 위해 iterable을 사용합니다.</p>
+<h4 id="Loop"><a href="#Loop" class="headerlink" title="Loop"></a>Loop</h4><p>ES6에서는 ES5에서 제공되는 기본 기능들에도 변화가 생겼습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = &#123;</span><br><span class="line"> <span class="string">'0'</span>: <span class="number">3</span>,</span><br><span class="line">  a: <span class="number">5</span>,</span><br><span class="line">  [Symbole()]: <span class="number">7</span>,</span><br><span class="line">  b: <span class="number">6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ES5으로 for .. in은 순서보장이 지원되지 않았는데,<br>ES6에서는 숫자, 알파벳, 심볼로 순서로 정렬되서 결과를 나옵니다.(생성은 순서대로 진행된다.)</p>
+<h4 id="while-문으로-살펴보는-iterator"><a href="#while-문으로-살펴보는-iterator" class="headerlink" title="while 문으로 살펴보는 iterator"></a>while 문으로 살펴보는 iterator</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="keyword">while</span>(arr.length &gt; <span class="number">0</span>) &#123; <span class="comment">// 계속 반복할지 판단</span></span><br><span class="line">  <span class="built_in">console</span>.log(arr.pop()); <span class="comment">//반복시 마다 처리할 것</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> iterator = &#123;</span><br><span class="line">  data: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; </span><br><span class="line">      done: <span class="keyword">this</span>.data.length === <span class="number">0</span>, <span class="comment">// 계속 반복할지 판단</span></span><br><span class="line">      value: <span class="keyword">this</span>.data.pop() <span class="comment">// 반복시 마다 처리할 것</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>while문과 iterator객체가 매우 유사하다는 사실을 알 수 있습니다. </p>
+<p>차이점으로는 while은 loop를 ‘문’으로 돌아서 제어가 불가능 하지만 iterator는 ‘값’으로 돌기 때문에 제어할 수 있습니다. 또한 next() 함수로 실행하기 때문에 지연실행이 가능합니다.</p>
+<p>또한 while은 반복을 엔진이 해주지만 iterator는 외부에 실행기를 두어야 합니다.</p>
+<p>즉, <strong>iterator object</strong>는 반복 자체를 하지는 않지만, 외부에서 반복하려고 할 때 반복에 필요한 조건과 실행을 미리 준비해둔 <strong>객체</strong> 입니다.</p>
+<p>이를 통해 반복행위와 반복을 위한 준비를 분리했다고 볼 수 있습니다.</p>
+<h4 id="ES6-Loop"><a href="#ES6-Loop" class="headerlink" title="ES6+ Loop"></a>ES6+ Loop</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 사용자 반복처리기 (직접 Iterator 반복 처리기를 구현)</span></span><br><span class="line"><span class="keyword">const</span> loop = <span class="function">(<span class="params">iter, f</span>) =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// iterable이라면 iterator를 얻음</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> iter[<span class="built_in">Symbol</span>.iterator] === <span class="string">'function'</span>) &#123;</span><br><span class="line">    iter = iter[<span class="built_in">Symbol</span>.iterator]();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// iteratorObject가 아니라면 건너뜀</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> iter.next != <span class="string">'function'</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> = v = iter.next();</span><br><span class="line">    <span class="keyword">if</span> (v.done) <span class="keyword">return</span>; <span class="comment">// 종료 처리</span></span><br><span class="line">    f(v.value) <span class="comment">// 현재 값을 전달</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// iterable이자, iterator인 객체</span></span><br><span class="line"><span class="keyword">const</span> iter = &#123;</span><br><span class="line">  [Symbole.iterator]()&#123;<span class="keyword">return</span> <span class="keyword">this</span>&#125;</span><br><span class="line">  data: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">  next() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; </span><br><span class="line">      done: <span class="keyword">this</span>.data.length === <span class="number">0</span>,</span><br><span class="line">      value: <span class="keyword">this</span>.data.pop()</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">loop(iter, <span class="built_in">console</span>.log);</span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>loop라는 반복기를 통해 iterator object를 순회합니다.</p>
+<h4 id="destructuring-amp-amp-For-of"><a href="#destructuring-amp-amp-For-of" class="headerlink" title="destructuring &amp;&amp; For of"></a>destructuring &amp;&amp; For of</h4><h5 id="destructuring"><a href="#destructuring" class="headerlink" title="destructuring"></a>destructuring</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [a,...b] = iter;</span><br><span class="line"><span class="built_in">console</span>.log(a, b);</span><br><span class="line"><span class="comment">//4, [3, 2, 1]</span></span><br></pre></td></tr></table></figure>
+<p>실제로 destructuring은 배열을 해체하는 게 아니라 iterable을 해체하는 것입니다.<br>배열(문자열)을 넣었을 때도 destructuring이 정상작동하는 원리는 배열(문자열)에도 [Symbole.iterator]가 존재하다는 것을 알 수 있습니다.</p>
+<p>이처럼 기본에 알고 있는 데이터의 구조도 ES5와는 차이가 있습니다. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="string">""</span>[<span class="built_in">Symbol</span>.iterator]); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> [][<span class="built_in">Symbol</span>.iterator]); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<h5 id="For-of"><a href="#For-of" class="headerlink" title="For of"></a>For of</h5><p>새롭게 추가된 iterator를 소비하는 Loop로 기존 제어문이 소비하는 형태의 Loop 입니다.</p>
+<h4 id="Iterator-Example"><a href="#Iterator-Example" class="headerlink" title="Iterator Example"></a>Iterator Example</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 제곱을 요소로 갖는 가상 컬렉션 </span></span><br><span class="line"><span class="keyword">const</span> N2 = <span class="class"><span class="keyword">class</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(max) &#123;</span><br><span class="line">    <span class="keyword">this</span>.max = max;</span><br><span class="line">  &#125;</span><br><span class="line">  [<span class="built_in">Symbol</span>.iterator]() &#123;</span><br><span class="line">    <span class="keyword">let</span> cursor = <span class="number">0</span>, max = <span class="keyword">this</span>.max;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      done: <span class="literal">false</span>,</span><br><span class="line">      next() &#123;</span><br><span class="line">        <span class="keyword">if</span> (cursor &gt; max) &#123;</span><br><span class="line">          <span class="keyword">this</span>.done = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.value = cursor * cursor;</span><br><span class="line">          cursor++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log([...new N2(<span class="number">5</span>)]); <span class="comment">// [0, 1, 4, 9, 16]</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">const</span> v <span class="keyword">of</span> <span class="keyword">new</span> N2(<span class="number">5</span>)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 9</span></span><br><span class="line"><span class="comment">// 16</span></span><br></pre></td></tr></table></figure>
+<p>데이터 자체가 외부의 반복기에 의존하지 않고 원하는 조건에 의하여 데이터를 생성할 수 있게 되었습니다.</p>
+<h4 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h4><p>Generator를 가장 쉽게 사용하는 예로는 iterator generator로써 사용하는 것입니다.<br>Iterator generator라는걸 풀어서 생각해보면 iterator 생성기라는 말인데,<br>위에서 같이 보신 것처럼 지금까지 iterator 생성기의 역할은 iterable이 하고 있었습니다. </p>
+<div class="alert info"><p>iterator를 만든다는 입장에서 generator와 iterable은 같다고 볼 수 있다.</p>
+</div>
+<ul>
+<li><p>Iterable이 iterator를 만드는 방식<br><code>Symbol.iterator</code>호출하는 것에 의해서 그 반환 값으로 호출 당할 때마다 iterator를 만들어 낸다.</p>
+</li>
+<li><p>Generator는 Generator를 호출할 때 마다 그 결과로 iterator를 만들어 낸다.</p>
+</li>
+</ul>
+<p>그럼 실제로 우리는 iterable, iterator 인터페이스를 모두 알아야만 사용 가능할까요?<br>그건 너무 불친절한 일입니다. 그래서 그걸 몰라도 사용할 수 있는 문법적 장치가 바로 <code>generator</code>입니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> generator = <span class="function"><span class="keyword">function</span>*(<span class="params">max</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> cursor = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span>(cursor &lt; max) &#123;</span><br><span class="line">    <span class="keyword">yield</span> cursor * cursor; <span class="comment">// value</span></span><br><span class="line">    cursor ++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 1. return이 없지만 return하면 iterator 객체가 나온다.</span></span><br><span class="line"><span class="comment">// 2. 제어문을 멈출 수 있다.(지연 실행이 가능하다.)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log([...generator(<span class="number">5</span>)]) <span class="comment">// [0, 1, 4, 9, 16]</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">const</span> v <span class="keyword">of</span> generator(<span class="number">5</span>)) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 9</span></span><br><span class="line"><span class="comment">// 16</span></span><br></pre></td></tr></table></figure>
+<h4 id="마치며"><a href="#마치며" class="headerlink" title="마치며"></a>마치며</h4><p>iterable, iterator은 ES6에서 완전히 새로 나온 개념이라서 이해하기가 쉽지 않았습니다. 하지만 반면에 새로운 기능이라서 기존의 기능을 확장해서 알아야 할 필요는 없다는 생각으로 이해하려고 노력했습니다.</p>
+<p>평소 프로그래밍을 하다 보면 당연하게 데이터를 반복하려면 당연히 반복기가 필요하고, 그 반복기로 순회를 할 때는 멈출 수 없다는 게 당연한 생각이었습니다.</p>
+<p>그래서 ES6에서의 generator가 이를 개선해줄 거라고 나왔을 때도 반가워하며 찾아봤지만 이해하기가 쉽지 않았습니다. 하지만 이 기회에 interface를 기반으로 이해하려니까 더 잘 이해가 되는 것 같습니다.</p>
+<p>ES6의 데이터가 ES5의 데이터와 다르게 iterator의 interface를 갖고 있다는 것만으로도 많은 이해가 됐습니다.</p>
+<p>이제는 generator를 활용하며 익숙해져야겠습니다. :)</p>
+<blockquote>
+<p>출처 : <a href="https://www.youtube.com/watch?v=GhAkc00TvZs" target="_blank" rel="noopener">https://www.youtube.com/watch?v=GhAkc00TvZs</a></p>
+</blockquote>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/ES6/">ES6</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/generator/">generator</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/iteration/">iteration</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/07/19/project-react-2nd/" data-tooltip="더 멋져진 리엑트 프로젝트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/03/01/making-objects-correct/" data-tooltip="객체 바르게 만들기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/07/19/project-react-2nd/" data-tooltip="더 멋져진 리엑트 프로젝트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/03/01/making-objects-correct/" data-tooltip="객체 바르게 만들기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2018/05/01/iteration_generator/';
+                 
+                    this.page.identifier = '2018/05/01/iteration_generator/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

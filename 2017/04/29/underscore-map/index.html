@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Underscore의 _.map - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,library">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="Underscore 의 _.mapv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta name="keywords" content="javascript,library">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Underscore의 _.map">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/04/29/underscore-map/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="Underscore 의 _.mapv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.237Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Underscore의 _.map">
+<meta name="twitter:description" content="Underscore 의 _.mapv1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/underscore.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/underscore.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Underscore의 _.map
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-04-29T11:15:00+09:00">
+	
+		    4월 29, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/underscore/">underscore</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="Underscore-의-map"><a href="#Underscore-의-map" class="headerlink" title="Underscore 의 _.map"></a>Underscore 의 _.map</h3><p>v1부터 현재까지 코드가 어떻게 변해왔는지 확인해봅니다.</p>
+<a id="more"></a>
+<p>[~v0.1.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">map : <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj &amp;&amp; obj.map) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  _.each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index</span>) </span>&#123;</span><br><span class="line">    results.push(iterator.call(context, value, index));</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>기존 map function이 있는 기본 function을 사용한다.</li>
+<li>map의 특징 중 하나인 결과값 return을 하는데 _.each의 결과를 results에 저장하는 것을 확인할 수 있다.</li>
+</ol>
+<hr>
+<p>[~v0.5.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.map = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj &amp;&amp; _.isFunction(obj.map)) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  _.each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results.push(iterator.call(context, value, index, list));</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>obj.map -&gt; _.isFunction(obj.map) 로 변경됨</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.isFunction = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> obj &amp;&amp; obj.constructor &amp;&amp; obj.call &amp;&amp; obj.apply;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>function이 가지고 있는 property를 확인하는 방식으로 만들어져 있습니다.</p>
+<hr>
+<p>[~v0.6.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.map = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeMap &amp;&amp; obj.map === nativeMap) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results.push(iterator.call(context, value, index, list));</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>기본 값인지 확인하는 nativeMap 추가되었습니다.<br>(nativeMap = Array.prototype.map)</li>
+<li>_.each에서 _.each가 each로 변경되는데 부분이 있는데 map을 통해 그시기가 다른 내부 함수에서 each를 사용하기 위해 내부적으로 사용되는 경우를 고려해서 변경된것으로 보입니다.</li>
+</ol>
+<hr>
+<p>[~v1.1.1]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_.map = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (nativeMap &amp;&amp; obj.map === nativeMap) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results[results.length] = iterator.call(context, value, index, list);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>push 대신에 key에 접근해 직접 값을 할당하는 하는 방식으로 변경됨</li>
+</ol>
+<hr>
+<p>[~v1.1.4]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_.map = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) <span class="keyword">return</span> results;</span><br><span class="line">  <span class="keyword">if</span> (nativeMap &amp;&amp; obj.map === nativeMap) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results[results.length] = iterator.call(context, value, index, list);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>null 값 체크 추가</li>
+</ol>
+<hr>
+<p>[~v1.2.4]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">_.map = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) <span class="keyword">return</span> results;</span><br><span class="line">  <span class="keyword">if</span> (nativeMap &amp;&amp; obj.map === nativeMap) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results[results.length] = iterator.call(context, value, index, list);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">if</span> (obj.length === +obj.length) results.length = obj.length;</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>result의 length를 별도로 넣는 코드가 추가 됬습니다.<br>key로 접근해 데이터를 넣을때 length가 정확히 측정되지 않는 부분이 있는것 같습니다<br>(추가 확인 필요)</li>
+</ol>
+<hr>
+<p>[~v1.4.2]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_.map = _.collect = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iterator, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  <span class="keyword">if</span> (obj == <span class="literal">null</span>) <span class="keyword">return</span> results;</span><br><span class="line">  <span class="keyword">if</span> (nativeMap &amp;&amp; obj.map === nativeMap) <span class="keyword">return</span> obj.map(iterator, context);</span><br><span class="line">  each(obj, <span class="function"><span class="keyword">function</span>(<span class="params">value, index, list</span>) </span>&#123;</span><br><span class="line">    results[results.length] = iterator.call(context, value, index, list);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>_.collect 라는 다른 네이밍이 추가되었습니다.</li>
+</ol>
+<hr>
+<p>[~v1.8.0]<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">_.map = _.collect = <span class="function"><span class="keyword">function</span>(<span class="params">obj, iteratee, context</span>) </span>&#123;</span><br><span class="line">  iteratee = cb(iteratee, context);</span><br><span class="line">  <span class="keyword">var</span> keys = !isArrayLike(obj) &amp;&amp; _.keys(obj),</span><br><span class="line">      length = (keys || obj).length,</span><br><span class="line">      results = <span class="built_in">Array</span>(length);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> index = <span class="number">0</span>; index &lt; length; index++) &#123;</span><br><span class="line">    <span class="keyword">var</span> currentKey = keys ? keys[index] : index;</span><br><span class="line">    results[index] = iteratee(obj[currentKey], currentKey, obj);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>v1.8.0에 공통함수인 function cb에 의해서 _.each와 동일하게 iteratee를 사용하고 있습니다.</li>
+<li>results로 return되는 결과를 for를 돌면서 생성되는 데이터에의 의존되는 방식이 아닌, 미리 값체크를 완료후에 데이터를 삽입하고 있습니다.</li>
+</ol>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/underscore-js/">underscore.js</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/05/10/underscore-reduce/" data-tooltip="Underscore의 _.reduce">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/04/24/underscore-each/" data-tooltip="Underscore의 _.each">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/05/10/underscore-reduce/" data-tooltip="Underscore의 _.reduce">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/04/24/underscore-each/" data-tooltip="Underscore의 _.each">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/04/29/underscore-map/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/04/29/underscore-map/';
+                 
+                    this.page.identifier = '2017/04/29/underscore-map/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

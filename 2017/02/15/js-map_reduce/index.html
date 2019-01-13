@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>filter, map 그리고 reduce - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="javascript,higher-order function">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="데이터 구조 재가공 하기작업을 위해 원데이터를 재가공해야할때가 있습니다.원하는 구조를 만들기 위해 filter, map, reduce를 활용할 수 있습니다.">
+<meta name="keywords" content="javascript,higher-order function">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="filter, map 그리고 reduce">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="데이터 구조 재가공 하기작업을 위해 원데이터를 재가공해야할때가 있습니다.원하는 구조를 만들기 위해 filter, map, reduce를 활용할 수 있습니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="filter, map 그리고 reduce">
+<meta name="twitter:description" content="데이터 구조 재가공 하기작업을 위해 원데이터를 재가공해야할때가 있습니다.원하는 구조를 만들기 위해 filter, map, reduce를 활용할 수 있습니다.">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            filter, map 그리고 reduce
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-02-15T09:46:22+09:00">
+	
+		    2월 15, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/method/">method</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="데이터-구조-재가공-하기"><a href="#데이터-구조-재가공-하기" class="headerlink" title="데이터 구조 재가공 하기"></a>데이터 구조 재가공 하기</h3><p>작업을 위해 원데이터를 재가공해야할때가 있습니다.<br>원하는 구조를 만들기 위해 filter, map, reduce를 활용할 수 있습니다.</p>
+<a id="more"></a>
+<h2 id="1-filter"><a href="#1-filter" class="headerlink" title="1. filter"></a>1. filter</h2><p>filter는 말 그대로 어떠한 기준으로 데이터를 제한할 수 있습니다.</p>
+<p>아래는 JSON에서 무효한 항목 거르기는 예제입니다.<br>0이 아닌, 숫자 id인 모든 요소의 걸러진 json을 만들기 위해 filter()를 사용합니다.</p>
+<blockquote>
+<p>예제 출처 - <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/filter" target="_blank" rel="noopener">MDN : Array.prototype.filter()</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [ &#123; <span class="attr">id</span>: <span class="number">15</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">-1</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">0</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">3</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">12.2</span> &#125;, &#123; &#125;, &#123; <span class="attr">id</span>: <span class="literal">null</span> &#125;, &#123; <span class="attr">id</span>: <span class="literal">NaN</span> &#125;, &#123; <span class="attr">id</span>: <span class="string">'undefined'</span> &#125; ];</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> invalidEntries = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filterByID</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="string">'id'</span> <span class="keyword">in</span> obj &amp;&amp; <span class="keyword">typeof</span>(obj.id) === <span class="string">'number'</span> &amp;&amp; !<span class="built_in">isNaN</span>(obj.id)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    invalidEntries++;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arrByID = arr.filter(filterByID);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과 : [&#123; id: 15 &#125;, &#123; id: -1 &#125;, &#123; id: 0 &#125;, &#123; id: 3 &#125;, &#123; id: 12.2 &#125;]</span></span><br></pre></td></tr></table></figure>
+<p>위의 예제처럼 filter는 원 데이터를 자신이 원하는 기준을 이용해 재가공 하는데 작업을 수행 할 수 있습니다.</p>
+<h2 id="2-map"><a href="#2-map" class="headerlink" title="2. map"></a>2. map</h2><p>map을 활용할 경우 원데이터를 기준으로 데이터를 다른 구조로 변경할 수 있습니다.</p>
+<blockquote>
+<p>예제 출처 - <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noopener">MDN : Array.prototype.map()</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> kvArray = [&#123;<span class="attr">key</span>:<span class="number">1</span>, <span class="attr">value</span>:<span class="number">10</span>&#125;, &#123;<span class="attr">key</span>:<span class="number">2</span>, <span class="attr">value</span>:<span class="number">20</span>&#125;, &#123;<span class="attr">key</span>:<span class="number">3</span>, <span class="attr">value</span>: <span class="number">30</span>&#125;];</span><br><span class="line"><span class="keyword">var</span> reformattedArray = kvArray.map(<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123; </span><br><span class="line">   <span class="keyword">var</span> rObj = &#123;&#125;;</span><br><span class="line">   rObj[obj.key] = obj.value;</span><br><span class="line">   <span class="keyword">return</span> rObj;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과 : [&#123;1:10&#125;, &#123;2:20&#125;, &#123;3:30&#125;]</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-reduce"><a href="#3-reduce" class="headerlink" title="3. reduce"></a>3. reduce</h2><p>reduce 메서드는 누산기 역할을 할 수 있으며, 값을 재가공 할 수도 있습니다.</p>
+<p>reduce를 제대로 사용하기위해서는 넣어야할 파라미터들을 잘 알고 있는게 중요합니다.</p>
+<ul>
+<li>previousValue : 이전 마지막 콜백 호출에서 반환된 값 또는 공급된 경우 초기값(initialValue)  </li>
+<li>currentValue : 배열 내 현재 처리되고 있는 요소(element).  </li>
+<li>currentIndex : 배열 내 현재 처리되고 있는 요소의 인덱스.  </li>
+<li>array : reduce에 호출되는 배열.</li>
+</ul>
+<p>우선 reduce활용으로 만든 누산기 예제 입니다.</p>
+<blockquote>
+<p>예제 출처 - <a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce" target="_blank" rel="noopener">MDN : Array.prototype.reduce()</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].reduce(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, currentValue, currentIndex, array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> previousValue + currentValue;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과 : 10</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>initialValue : 초기값을 지정했을 경우</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].reduce(<span class="function"><span class="keyword">function</span>(<span class="params">previousValue, currentValue, currentIndex, array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> previousValue + currentValue;</span><br><span class="line">&#125;, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과 : 20</span></span><br></pre></td></tr></table></figure>
+<p>reduce의 좀 더 나은 활용방법은 어떤것이 있을까요?  </p>
+<p>filter를 사용할 경우 원하는 데이터를 어떠한 기준으로 정제할 수 있습니다.<br>다만, 가진 데이터 구조를 변경하지는 못합니다.</p>
+<p>그럼 map은 어떨까요?<br>map을 사용할 경우 데이터 구조를 원하는대로 변경할 수 있지만 그 데이터의 사이즈를 재조정 하지 못합니다.<br>즉, 조건에 맞게 데이터를 넣지 않을 수 있지만 실질적으로 Return 되는 데이터에서 제거되지는 못합니다.</p>
+<p>가장 첫번째 filter의 예제를 활용해 봅시다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [ &#123; <span class="attr">id</span>: <span class="number">15</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">-1</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">0</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">3</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">12.2</span> &#125;, &#123; &#125;, &#123; <span class="attr">id</span>: <span class="literal">null</span> &#125;, &#123; <span class="attr">id</span>: <span class="literal">NaN</span> &#125;, &#123; <span class="attr">id</span>: <span class="string">'undefined'</span> &#125; ];</span><br><span class="line"></span><br><span class="line"><span class="comment">// filter를 사용했을 때 number type의 값만 뺐을 경우 아래와 같은 값을 얻을 수 있었습니다.</span></span><br><span class="line"><span class="comment">// [&#123; id: 15 &#125;, &#123; id: -1 &#125;, &#123; id: 0 &#125;, &#123; id: 3 &#125;, &#123; id: 12.2 &#125;]</span></span><br></pre></td></tr></table></figure>
+<p>map을 사용해 위의 arr에 아래의 label값을 추가하겠습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> label = [<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>,<span class="string">"e"</span>,<span class="string">"f"</span>,<span class="string">"g"</span>,<span class="string">"h"</span>,<span class="string">"i"</span>];</span><br><span class="line"></span><br><span class="line">arr.map(<span class="function"><span class="keyword">function</span>(<span class="params">obj, i</span>) </span>&#123;</span><br><span class="line">  obj.label = label[i];</span><br><span class="line">  <span class="keyword">return</span> x</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 결과 </span></span><br><span class="line"><span class="comment">&#123; id: 15, label: 'a'&#125;, &#123; id: -1, label: 'b' &#125;, &#123; id: 0, label: 'c' &#125;, &#123; id: 3, label: 'c' &#125;, &#123; id: 12.2, label: 'd' &#125;,</span></span><br><span class="line"><span class="comment">&#123; name: 'f'&#125;, &#123; id: null, label: 'g' &#125;, &#123; id: NaN, label: 'h' &#125;, &#123; id: 'undefined', label: 'i' &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>그렇다면 map안에 filter에서 사용했던 조건문을 추가해서 작업을 해보죠.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">arr.map(<span class="function"><span class="keyword">function</span>(<span class="params">obj, i</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span>(obj.id) === <span class="string">'number'</span> &amp;&amp; !<span class="built_in">isNaN</span>(obj.id)) &#123;</span><br><span class="line">    obj.label = label[i];</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과</span></span><br><span class="line"><span class="comment">// [Object, Object, Object, Object, Object, undefined, undefined, undefined, undefined]</span></span><br></pre></td></tr></table></figure>
+<p>map은 조건문은 값을 제한하여도 원래 사이즈와 동일한 사이즈의 데이터를 리턴해줍니다.</p>
+<p>reduce를 사용해서 데이터를 정제하도록 하겠습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = arr.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">prev, value, idx</span>) </span>&#123;</span><br><span class="line">  value.label = label[idx];</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span>(value.id) === <span class="string">'number'</span> &amp;&amp; !<span class="built_in">isNaN</span>(value.id)) &#123;</span><br><span class="line">    prev.push(value);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> prev;</span><br><span class="line">&#125;, []);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 결과 : label데이터가 추가가 됨과 동시에 조건문에 맞게 정제된 데이터가 내려옵니다. </span></span><br><span class="line"><span class="comment">// [&#123;id: 15, label: 'a&#125;, &#123;id: -1, label: 'b'&#125;, ... ]</span></span><br></pre></td></tr></table></figure>
+<p>filter와 map의 기능을 reduce에서 동시에 작업할 수 있었습니다.</p>
+<p>하지만 이렇다고 해서 모든 경우 reduce를 쓰는건 옳지 않습니다.<br>적당한 상황에 옳게 쓰기위해 filter, map, reduce를 쓰는 법을 알아야 하겠습니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/03/29/tool-each/" data-tooltip="Grunt, Gulp, Webpack">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/01/30/css-multiline_ellipsis/" data-tooltip="여러줄에서 말줄임표 사용하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/03/29/tool-each/" data-tooltip="Grunt, Gulp, Webpack">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/01/30/css-multiline_ellipsis/" data-tooltip="여러줄에서 말줄임표 사용하기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/02/15/js-map_reduce/';
+                 
+                    this.page.identifier = '2017/02/15/js-map_reduce/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

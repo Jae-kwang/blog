@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>객체 바르게 만들기 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="js,object,pattern,prototype">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="프로젝트를 구조화하면서 객체의 생성방식은 매우 중요해집니다. 여러가지 객체생성 패턴을 살펴보고 제가 겪었던 문제를 간단히 정리해보았습니다.">
+<meta name="keywords" content="js,object,pattern,prototype">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="객체 바르게 만들기">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="프로젝트를 구조화하면서 객체의 생성방식은 매우 중요해집니다. 여러가지 객체생성 패턴을 살펴보고 제가 겪었던 문제를 간단히 정리해보았습니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/Buddha.jpeg">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="객체 바르게 만들기">
+<meta name="twitter:description" content="프로젝트를 구조화하면서 객체의 생성방식은 매우 중요해집니다. 여러가지 객체생성 패턴을 살펴보고 제가 겪었던 문제를 간단히 정리해보았습니다.">
+<meta name="twitter:image" content="https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/Buddha.jpeg">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/javascript.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            객체 바르게 만들기
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-03-01T14:27:00+09:00">
+	
+		    3월 01, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/core/">core</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>프로젝트를 구조화하면서 객체의 생성방식은 매우 중요해집니다. 여러가지 객체생성 패턴을 살펴보고 제가 겪었던 문제를 간단히 정리해보았습니다.</p>
+<a id="more"></a>
+<p>객체 생성 패턴에 대한 간략한 정리이며, 하단부분에는 저의 생각을 작성했습니다. 읽는데 참고하시면 좋겠습니다. “자바스크립트 패턴과 테스트” 책을 참고하였습니다.</p>
+<h3 id="1-모듈-패턴"><a href="#1-모듈-패턴" class="headerlink" title="1. 모듈 패턴"></a>1. 모듈 패턴</h3><p>모듈 패턴은 <code>데이터 감춤이 주목적인 함수</code>가 <code>모듈 API</code>를 이루는 <code>객체</code>를 반환하게 하는 구조이며, 두가지 기반의 모듈 생성 방식이 있습니다.</p>
+<h4 id="1-1-임의-모듈-생성"><a href="#1-1-임의-모듈-생성" class="headerlink" title="1.1 임의 모듈 생성"></a>1.1 임의 모듈 생성</h4><figure class="codeblock codeblock--tabbed"><figcaption><span>임의 모듈 패턴 예시</span><ul class="tabs"><li class="tab active">javascript</li></ul></figcaption><div class="tabs-content"><figure class="highlight javascript" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MyApp = MyApp || {};</span><br><span class="line"></span><br><span class="line">MyApp.wildlifePreserveSimulator = <span class="function"><span class="keyword">function</span>(<span class="params">animalMaker</span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> animals = []; <span class="comment">// 프라이빗 변수</span></span><br><span class="line">  <span class="keyword">return</span> { <span class="comment">// API 반환</span></span><br><span class="line">    addAnimals: <span class="function"><span class="keyword">function</span>(<span class="params">species, sex</span>) </span>{</span><br><span class="line">      animals.push(animalMaker.make(species, sex));</span><br><span class="line">    },</span><br><span class="line">    <span class="attr">getAnimalCount</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">      <span class="keyword">return</span> animals.legnth;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 사용</span></span><br><span class="line"><span class="keyword">var</span> perserve = MyApp.wildlifePreserveSimulator(realAnimalMaker);</span><br><span class="line">preserve.addAnimal(gorilla, female);</span><br></pre></td></tr></tbody></table></figure></div></figure>
+<h4 id="1-2-즉시-실행-모듈-생성"><a href="#1-2-즉시-실행-모듈-생성" class="headerlink" title="1.2 즉시 실행 모듈 생성"></a>1.2 즉시 실행 모듈 생성</h4><p>API 반환하는건 임의 모듈과 같지만, 외부 함수를 선언하자마자 실행하는 방법입니다.<br>반환된 API는 이름공간을 가진 전역 변수에 할당된 후 해당 모듈의 싱글톤 인스턴스가 됩니다.</p>
+<figure class="codeblock codeblock--tabbed"><figcaption><span>싱글톤 모듈</span><ul class="tabs"><li class="tab active">javascript</li></ul></figcaption><div class="tabs-content"><figure class="highlight javascript" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MyApp = MyApp || {};</span><br><span class="line"></span><br><span class="line">MyApp.wildlifePreserveSimulator = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">var</span> animals = [];</span><br><span class="line">  <span class="keyword">return</span> {</span><br><span class="line">    <span class="attr">addAnimals</span>: <span class="function"><span class="keyword">function</span>(<span class="params">animalMaker, species, sex</span>) </span>{</span><br><span class="line">      animals.push(animalMaker.make(species, sex));</span><br><span class="line">    },</span><br><span class="line">    <span class="attr">getAnimalCount</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>{</span><br><span class="line">      <span class="keyword">return</span> animals.legnth;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 사용</span></span><br><span class="line">MyApp.wildlifePreserveSimulator.addAnimal(realAnimalMaker, gorilla, female);</span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p>외부 함수는 애플리케이션 기동 코드의 실행과 상관없이 코드가 작성된 지점에서 즉시 실행되기 때문에 함수 (즉시) 실행시 의존성을 가져오지 못하며 외부 함수에 주입할 수 없습니다.</p>
+<h3 id="2-new-객체-생성-패턴"><a href="#2-new-객체-생성-패턴" class="headerlink" title="2. new 객체 생성 패턴"></a>2. new 객체 생성 패턴</h3><figure class="codeblock codeblock--tabbed"><figcaption><span>Marsupial함수와 생성자 함수 사용법</span><ul class="tabs"><li class="tab active">javascript</li></ul></figcaption><div class="tabs-content"><figure class="highlight javascript" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Marsupial</span>(<span class="params">name, nocturanl</span>) </span>{</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">  <span class="keyword">this</span>.isNocturnal = nocturanl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> maverick = <span class="keyword">new</span> Marsupial(<span class="string">'매버릭'</span>, <span class="literal">true</span>);</span><br><span class="line"><span class="keyword">var</span> slider = <span class="keyword">new</span> Marsupial(<span class="string">'슬라이더'</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(maverick.isNocturnal); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(maverick.name);        <span class="comment">// '매버릭'</span></span><br><span class="line"><span class="built_in">console</span>.log(slider.isNocturnal);   <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(slider.name);          <span class="comment">// '슬라이더'</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p>Marsupial함수는 주어진 인자를 내부적으로 생성할 인스턴스의 프로퍼티에 할당한다. 다음 줄에서 maverick, slider라는 이름으로 생성한 두 Marsupial 인스턴스는 각자 고유한 프로퍼티 값을 가진다.</p>
+<p>자바스크립트 언어는 Marsupial 함수를 생성자 함수(new 키워드와 함께 사용하려고 작성한 함수)로 사용하라고 강요하지 않는다. 즉, new 키워드 없이 생성자 함수를 사용해도 이를 못하게 막을 보호 체계가 없다. 그래서 더러 개발자들은 파스칼 표기법(PascalCase)으로 생성자 함수를 따로 표기하여 구분하기도 한다.</p>
+<h3 id="3-생성자-함수-프로토-타입-함수"><a href="#3-생성자-함수-프로토-타입-함수" class="headerlink" title="3. 생성자 함수 + 프로토 타입 함수"></a>3. 생성자 함수 + 프로토 타입 함수</h3><figure class="codeblock codeblock--tabbed"><figcaption><span>Marsupial함수와 생성자 함수 사용법</span><ul class="tabs"><li class="tab active">javascript</li></ul></figcaption><div class="tabs-content"><figure class="highlight javascript" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Marsupial</span>(<span class="params">name, nocturanl</span>) </span>{</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">  <span class="keyword">this</span>.isNocturnal = nocturanl;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">Marsupial.prototype.isAwake = <span class="function"><span class="keyword">function</span>(<span class="params">isNight</span>) </span>{</span><br><span class="line">  <span class="keyword">return</span> isNight === <span class="keyword">this</span>.isNocturnal; </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> maverick = <span class="keyword">new</span> Marsupial(<span class="string">'매버릭'</span>, <span class="literal">true</span>);</span><br><span class="line"><span class="keyword">var</span> slider = <span class="keyword">new</span> Marsupial(<span class="string">'슬라이더'</span>, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> isNightTime = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(maverick.isAwake(isNightTime)); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(slider.isAwake(isNightTime));   <span class="comment">// false</span></span><br></pre></td></tr></tbody></table></figure></div></figure>
+<p>생성자 함수의 프로토타입에 함수를 정의하면 객체 인스턴스를 대량 생성할 때 함수 사본 개수를 한개로 제한하여 메모리 점유율을 낮추고 성능까지 높이는 추가 이점이 있습니다.</p>
+<h3 id="4-올바른-객체-생성에-대한-나의-생각"><a href="#4-올바른-객체-생성에-대한-나의-생각" class="headerlink" title="4. 올바른 객체 생성에 대한 나의 생각"></a>4. 올바른 객체 생성에 대한 나의 생각</h3><p>구조화를 위해 데이터의 객체화에 대한 필요성을 느끼기 시작했습니다. 그래서 흔히들 말하는 모듈패턴과 생성자 함수 프로토 타입을 익히는데 노력했습니다.</p>
+<p>그리고는 특별히 이상한 점을 느끼지 못하고는 이리저리 패턴들을 적용하기에 이르렀습니다. 하지만 자바스크립트가 아시다시피 모든걸 묵인하고 인용하며 에러는 주지않고 “너 하고싶은대로 하거라” 라는  부처님 같은 녀석이라서 이것에 대한 오용과 남용(?)에 대해 잘 인지하지 못하고 있었습니다.<br><br><div class="figure center" style="width:;"><img class="fig-img" src="Buddha.jpeg" alt="마음대로 만들어도 괜찮아~"><span class="caption">마음대로 만들어도 괜찮아~</span></div></p>
+<p>결국 전 이런 코드까지 쓰게 된거죠. 끔찍한 혼종을 만들어 버리고 맙니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Car</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.oil = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    getOil: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> oil;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Car.prototype.setOil = <span class="function"><span class="keyword">function</span>(<span class="params">newOil</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.oil = newOil;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 모듈패턴 처럼 사용</span></span><br><span class="line"><span class="keyword">var</span> myCar = Car();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 생성자 함수 처럼 사용</span></span><br><span class="line"><span class="keyword">var</span> myNewCar = <span class="keyword">new</span> Car();</span><br></pre></td></tr></table></figure>
+<p>당연하지만 생각처럼 동작지 않습니다. 두 경우 모두 <code>setOil</code>을 찾아볼 수 없습니다. 모듈 패턴에서는 당연히 myCar가 Car의 인스턴스가 아니기 때문이며, 생성자 패턴에서는 return의 대상이 변경되어서 더 이상 생성자의 역할을 하지 못하기 때문입니다.</p>
+<p>이를 통해 알게 된 점은 목적에 맞는 방법으로 객체를 생성해야 한다는 점입니다. 그러니 모듈 패턴은 유틸과 같은 한 개의 모듈로 동작하게 되는 경우가 적당하며, 여러 개의 인스턴스가 필요한 경우에는 생성자 패턴을 적용해야 합니다.</p>
+<p>이름에서 그 패턴의 목적이 잘 녹아있음에도 불구하고, 자바스크립트의 특성에 의해 전혀 생각지도 못하게 쓰고 있었던 것 같습니다.</p>
+<p>비록 실제 서비스가 <code>Car</code>와 같이 쉽게 객체를 명확히 나눌 수 있는 것은 아닙니다. 객체 자체를 어떻게 구조조화 할건지는 참 어려운 일 중 하나인 것 같습니다. 하지만 이제 스스로도 객체를 생성할 때 좀 더 명확한 판단의 기준을 가지고 효율 적인 객체를 생성하는데 큰 도움이 될 것 같습니다. 😃</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/js/">js</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/object/">object</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/pattern/">pattern</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/prototype/">prototype</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/05/01/iteration_generator/" data-tooltip="Iteration &amp; Generator">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/02/04/project-react/" data-tooltip="리엑트로 프로젝트 갈아입히기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/05/01/iteration_generator/" data-tooltip="Iteration &amp; Generator">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/02/04/project-react/" data-tooltip="리엑트로 프로젝트 갈아입히기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2018/03/01/making-objects-correct/';
+                 
+                    this.page.identifier = '2018/03/01/making-objects-correct/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

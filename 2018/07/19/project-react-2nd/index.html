@@ -1,0 +1,587 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>더 멋져진 리엑트 프로젝트 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="react,contextAPI,react-router,project,webpack,javascript,typescript">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="올 초에 작업했던 리엑트 프로젝트를 조금 더 개선하기 위해 수행했던 여러 작업에 대해 간단히 정리해보았습니다.">
+<meta name="keywords" content="react,contextAPI,react-router,project,webpack,javascript,typescript">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="더 멋져진 리엑트 프로젝트">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="올 초에 작업했던 리엑트 프로젝트를 조금 더 개선하기 위해 수행했던 여러 작업에 대해 간단히 정리해보았습니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/contextAPI.png">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/form.png">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/movie_image.jpg">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.225Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="더 멋져진 리엑트 프로젝트">
+<meta name="twitter:description" content="올 초에 작업했던 리엑트 프로젝트를 조금 더 개선하기 위해 수행했던 여러 작업에 대해 간단히 정리해보았습니다.">
+<meta name="twitter:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/contextAPI.png">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/thumbnailImage.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/thumbnailImage.jpg" />
+    
+    
+        <meta property="og:image" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/coverImage.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/coverImage.jpg" />
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-center
+                    " style="background-image:url('/blog/2018/07/19/project-react-2nd/coverImage.jpg');" data-behavior="3">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title" itemprop="headline">
+            더 멋져진 리엑트 프로젝트
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2018-07-19T09:07:12+09:00">
+	
+		    7월 19, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/react/">react</a>
+
+
+    
+</div>
+
+</div>
+            
+        </div>
+
+            <div id="main" data-behavior="3"
+                 class="hasCover
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>올 초에 작업했던 리엑트 프로젝트를 조금 더 개선하기 위해 수행했던 여러 작업에 대해 간단히 정리해보았습니다.</p>
+<a id="more"></a>
+<h1 id="리엑트-프로젝트를-조금-더-멋지게-만들자"><a href="#리엑트-프로젝트를-조금-더-멋지게-만들자" class="headerlink" title="리엑트 프로젝트를 조금 더 멋지게 만들자!"></a>리엑트 프로젝트를 조금 더 멋지게 만들자!</h1><p>기존 프로젝트에서 아쉬웠던 부분과 새롭게 추가해보고 싶은 것들을 정리했습니다.<br><br></p>
+<ul>
+<li>빌드 프로세스 개선</li>
+<li>Router 적용</li>
+<li>react v15 -&gt; v16 (ContextAPI 활용)</li>
+<li>typescript 적용</li>
+</ul>
+<p>너무 많은 목표를 두는 게 아닌가 생각은 했지만, 목표들이 어느 정도 포함관계가 있어서 지금 해두는 게 이후에 적용하는 것보다 덜 복잡할 것 같다는 생각을 해서 이번 기회에 추진하기로 했습니다.</p>
+<h2 id="빌드-프로세스-개선"><a href="#빌드-프로세스-개선" class="headerlink" title="빌드 프로세스 개선"></a>빌드 프로세스 개선</h2><p>올 초에 프로젝트를 진행하면서 리엑트로 프로젝트를 변경하는 것을 중점으로 작업하다 보니 그 이외에 부분을 신경 쓰지 못했습니다. 그중에 한 부분은 바로 빌드 프로세스입니다.</p>
+<h4 id="리비전-추가"><a href="#리비전-추가" class="headerlink" title="리비전 추가"></a>리비전 추가</h4><p>기존에는 번들 파일이 <code>bundle.js</code>와 같은 형태로 생성되었습니다. 이러한 형태는 파일이 수정되어도 브라우저는 알지 못할 수 있습니다. 브라우저는 기본적으로 리소스를 브라우저캐시에 두고 파일 이름의 차이로 인해 변경사항을 파악합니다. 그래서 아래처럼 작성하여 브라우저 캐시를 갱신합니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  output: [name].[chunkhash].js,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> ExtractTextPlugin(<span class="string">'[name].[contenthash].css'</span>)</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>하지만 이렇게 번들링된 파일은 파일 변경 시 매번 hash 값이 달라지니 파일 이름도 같이 달라져서 HTML에 sciprt를 추가할 수가 없습니다. 번들링 된 파일 이름을 알아내기 위해 webpack에 <a href="https://www.npmjs.com/package/webpack-manifest-plugin" target="_blank" rel="noopener">webpack-manifest-plugin</a> 을 적용했습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> ManifestPlugin(&#123;</span><br><span class="line">  fileName: <span class="string">`<span class="subst">$&#123;path&#125;</span>/manifest.json`</span></span><br><span class="line">&#125;),</span><br></pre></td></tr></table></figure>
+<p>빌드를 통해 나온 <code>manifest.json</code> 파일을 통해 번들링된 파일 이름을 얻을 수 있고 리소스를 HTML에 추가할 수 있었습니다.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"bundle.js"</span>: <span class="string">"bundle.ac8a6e5e050f1befb5e4.js"</span>,</span><br><span class="line">  <span class="attr">"bundle.css"</span>: <span class="string">"bundle.b0cd9b716fef2bc73a57dcbd83cfefb0.css"</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="공통모듈-분리"><a href="#공통모듈-분리" class="headerlink" title="공통모듈 분리"></a>공통모듈 분리</h4><p>웹팩의 설정파일은 <code>webpack.config.dev.js</code>, <code>webpack.config.prod.js</code> 와 같이 나누어져 있었습니다. 여러 설정이 추가되면서 설정파일이 커지면서 공통된 부분을 별도로 나누는 것이 좋다고 생각했습니다. </p>
+<p>공통 부분은 <code>webpack.common.js</code>를 생성해서 공통모듈을 생성하였습니다. 해당 파일로 분리된 설정파일을 각각 하나의 <code>dev</code>와 <code>prod</code> 병합할 때는 <a href="https://github.com/survivejs/webpack-merge" target="_blank" rel="noopener">webpack-merge</a>을 사용했습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">'./webpack.common.js'</span>)</span><br><span class="line"><span class="keyword">const</span> ssr = <span class="built_in">require</span>(<span class="string">'SSR_render.jg'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = merge(common, &#123; ... &#125;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Router-적용"><a href="#Router-적용" class="headerlink" title="Router 적용"></a>Router 적용</h2><p>기존에는 단일페이지라서 별도로 router를 세팅할 필요가 없지만, 새롭게 추가될 페이지를 위해 <a href="https://reacttraining.com/react-router/" target="_blank" rel="noopener">react-route</a>를 적용하기로 하였습니다. </p>
+<p>해당 프로젝트는 앞서 언급했던 것처럼 SSR이 지원되어야 했습니다. 그러므로 리엑트에서 적용했던 <code>ReactDOM.render</code> 과 <code>ReactDOMServer.renderToString</code>처럼 SSR과 CSR을 위한 다른 Wrapper 메서드가 필요했는데 역시나 App을 Wrapping 하여 사용하는 <code>react-router</code> 도 그러한 메서드가 존재했습니다. CSR에는 <code>BrowserRouter</code> 를 사용하고, SSR에는 <code>StaticRouter</code>를 사용하였습니다.</p>
+<p>App 내부에서는 <code>&lt;Switch/&gt;</code>로 감싼 <code>&lt;Route/&gt;</code> 들을 설정하였습니다.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SSR</span></span><br><span class="line"><span class="keyword">import</span> &#123; StaticRouter &#125; <span class="keyword">from</span> <span class="string">'react-router-dom'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// CSR</span></span><br><span class="line"><span class="keyword">import</span> &#123; BrowserRouter &#125; <span class="keyword">from</span> <span class="string">'react-router-dom'</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="React-v16-적용"><a href="#React-v16-적용" class="headerlink" title="React v16 적용"></a>React v16 적용</h2><p>리엑트가 v16을 배포한 지 약 10개월 정도 지났는데, 이번 기회에 v16 중 필요한 기능들을 적용해 보았습니다.</p>
+<h4 id="Context-API-도입"><a href="#Context-API-도입" class="headerlink" title="Context API 도입"></a>Context API 도입</h4><p>Context API는 주로 전역 데이터가 필요할 때 사용합니다. 이러한 기능은 제가 redux를 도입한 목적과 같아 충분히 교체 가능했습니다. </p>
+<div class="figure center" style="width:;"><img class="fig-img" src="contextAPI.png" alt="출처 : https://blog.bitsrc.io/react-context-api-a-replacement-for-redux-6e20790492b3"><span class="caption">출처 : https://blog.bitsrc.io/react-context-api-a-replacement-for-redux-6e20790492b3</span></div>
+<p>redux를 이해하고 적용하는데 많은 시간이 든다고 생각됩니다. 저도 필요한 부분은 적용하며 사용했지만, 모든 부분을 자세히 알고 있다고는 생각할 수 없습니다. 전역 데이터를 위해 사용했지만, redux의 사용이 좀 과하다는 생각이 남아있긴 했습니다.</p>
+<p>Context API를 적용하기 위해 많은 정보를 찾았고, 그중 많은 부분을 <code>velopert</code>의 블로그에서 참고하여 작업을 진행하였습니다. 이유는 redux를 사용할 때도 store 내부에 크게 2개로 나누어 구분해서 사용했기 때문입니다. 그래서 Context API를 적용하려는 상황에서도 다중 context가 필요하다고 생각이 들었습니다. 이와 관련한 내용이 친절하게 설명이 되어 있었습니다.</p>
+<blockquote>
+<p><a href="https://velopert.com/3606" target="_blank" rel="noopener">리액트 16.3 에 소개된 새로워진 Context API 파헤치기</a></p>
+</blockquote>
+<p>하지만 모든 부분을 이전과 같은 컴포넌트 구조로 교체하지 못했습니다. 하나의 컴포넌트에서 여러 context가 필요한 경우였습니다. redux에는 store가 하나였기에 이런 부분에는 문제가 없었습니다. Context API를 활용하는 컴포넌트를 Hoc 형태로 만들었기에 하나의 컴포넌트에 2개 이상의 context를 주입받아야 할 때 컴포넌트를 겹겹이 감싸는 형태는 좋아 보이지 않았습니다.</p>
+<p>그래서 이러한 경우가 발생한 컴포넌트들은 다시 context 기준으로 컴포넌트를 분리하였습니다. context 기준으로 새롭게 컴포넌트를 생성하다 보니 이전보다 더 명확한 목표를 가진 컴포넌트가 자연스럽게 생성된 결과를 볼 수 있었습니다.</p>
+<p>작업하면서 “이 데이터가 이 context에 들어가는 게 맞나?”라는 고민을 참 많이 했던 것 같습니다. 구현 전에 데이터 모델링이 중요하다는 사실을 다시 한 번 느꼈습니다. 하지만 설계단계가 아닌 개발 중간마다 이러한 경우를 맞이하는 것이 아직은 더 많은 공부가 필요한 것을 상기시켜 주는 것 같습니다.</p>
+<h4 id="redux-from에서-formik로-변경"><a href="#redux-from에서-formik로-변경" class="headerlink" title="redux-from에서 formik로 변경"></a>redux-from에서 formik로 변경</h4><p>redux를 제거하게 되면서, redux관련 모듈인 react-redux, redux-thunk, redux-form 들을 제거할 수 있었습니다. 그 중 redux-form은 다른 모듈로 대체되어야 했는데 그 역할은 <code>formik</code>였습니다. 사용이 간편하고 필요한 기능들을 충족했기 때문이었습니다.</p>
+<div class="figure center" style="width:;"><img class="fig-img" src="form.png" alt=""></div>
+<p>사실 submit action이나 validation은 작업의 편의성을 위해 라이브러리를 주로 사용합니다. 하지만 단순히 값을 체크하는걸 넘어서 자동으로 다른 폼의 값을 채우거나, 비동기로 값을 체크하거나, 특정 액션에 다른 view에 영향을 미치는 등 예외의 경우를 조작하는 것은 간단하지만은 않았습니다.</p>
+<p>이럴 거면 그냥 라이브러리 사용하지 않고 처음부터 만들 걸 그랬나 생각도 들었지만, 기본기능들을 그냥 새로 만드는 건 비효율적일 것 같지 않아 끈기있게 붙들고 적용하였습니다.<br><br></p>
+<div class="figure center" style="width:;"><img class="fig-img" src="movie_image.jpg" alt=""></div>
+<p>redux의 의존하지 않는다는 점에서 충분히 작업의미가 있었습니다. 처음엔 <code>redux-form</code>과 <code>formik</code>가 많이 다르다고 생각했지만, 결과적으로 바뀐 코드를 보면 역시 프론트엔드의 컴포넌트 형태의 개발은 크게 다르지 않다는 점을 알 수 있었습니다. </p>
+<blockquote>
+<p><a href="https://redux-form.com/7.4.2/" target="_blank" rel="noopener">redux-form</a></p>
+<p><a href="https://github.com/jaredpalmer/formik" target="_blank" rel="noopener">formik</a></p>
+</blockquote>
+<h4 id="ReactDOM-hydrate"><a href="#ReactDOM-hydrate" class="headerlink" title="ReactDOM.hydrate()"></a>ReactDOM.hydrate()</h4><p>v16을 적용하면 <code>ReactDOM.render()</code>를 <code>ReactDOM.hydrate()</code> 로 변경하라는 경고를 볼 수 있습니다. 이건 v16에서 나온 새로운 렌더링 메서드이며 <code>ReactDOM.render()</code> 은 v17에서는 사용되지 않을 예정이라고 합니다. </p>
+<p><code>ReactDOM.hydrate()</code> SSR을 지원하는 앱에서 서버 렌더링 된 마크업이 있는 노드에서 호출하면 리엑트는 이벤트 핸들러만 연결해서 성능을 시켜준다고 합니다.</p>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/46516395/whats-the-difference-between-hydrate-and-render-in-react-16" target="_blank" rel="noopener">What’s the difference between hydrate() and render() in React 16?</a></p>
+</blockquote>
+<hr>
+<h2 id="타입스크립트를-적용하는-이유"><a href="#타입스크립트를-적용하는-이유" class="headerlink" title="타입스크립트를 적용하는 이유"></a>타입스크립트를 적용하는 이유</h2><p>복잡한 데이터 구조는 버그를 발생시키는데 한몫합니다. 여러 프로젝트를 하면서 가장 많은 버그를 생성한 곳 역시 복잡한 데이터를 주고받는 부분이었습니다. 이러한 부분에 도움을 받을 만한 것이 바로 <code>타입스크립트(typescript)</code>라고 생각을 했고 적용해보기로 했습니다. 규모가 작은 프로젝트에는 오버엔지니어링이라고 생각될 수 있지만, 이번 기회에 타입스크립트를 적용해보면서 느낀 점도 있어서 결과적으로 “적용해보길 잘했다.”라는 생각을 했습니다.</p>
+<h4 id="타입스크립트-로더-설정"><a href="#타입스크립트-로더-설정" class="headerlink" title="타입스크립트 로더 설정"></a>타입스크립트 로더 설정</h4><p>공식페이지 <a href="https://www.typescriptlang.org/docs/handbook/react-&amp;-webpack.html" target="_blank" rel="noopener">React &amp; Webpack</a>에 언급된 <a href="https://github.com/s-panferov/awesome-typescript-loader" target="_blank" rel="noopener">awesome-typescript-loader</a>를 사용하기로 했습니다. 해당 loader를 설치한 후에 ‘webpack.config.js’ 설정했습니다. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	test: <span class="regexp">/\.tsx?$/</span>,</span><br><span class="line">	loader: <span class="string">'awesome-typescript-loader'</span>,</span><br><span class="line">	exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>타입스크립트를 설정한 파일의 확장자가 <code>.tsx</code> 인 것을 확인했고, 그 파일에만 타입스크립트가 적용되기 때문에 <code>.jsx</code> 파일을 하나씩 <code>.tsx</code> 로 변경하면서 기능을 확인한 후 넘어가는 식으로 변경 작업을 진행했습니다.</p>
+<h4 id="리엑트-with-타입스크립트"><a href="#리엑트-with-타입스크립트" class="headerlink" title="리엑트 with 타입스크립트"></a>리엑트 with 타입스크립트</h4><p>타입스크립트에서는 타입을 선언하는 방식이 많은데 저는 주로 가장 간단한 <code>interface</code> 키워드를 사용하여 타입을 생성했습니다. 우선 선언한 타입을 기준으로 리엑트 컴포넌트를 생성하는 방법입니다.<br><br></p>
+<ul>
+<li>함수기반 컴포넌트(React Stateless Functional Component with TypeScript)</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> React <span class="keyword">from</span> <span class="string">"react"</span></span><br><span class="line"><span class="keyword">interface</span> Props &#123;</span><br><span class="line">	name: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> customComponent: React.SFC&lt;Props&gt; = <span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &lt;h1&gt;Hello, &#123;props.name&#125;&lt;<span class="regexp">/h1&gt;;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>클래스기반 컴포넌트(React StateFul Class Component with TypeScript)</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> React <span class="keyword">from</span> <span class="string">"react"</span></span><br><span class="line"><span class="keyword">interface</span> Props &#123;</span><br><span class="line">    name: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">interface</span> State &#123;</span><br><span class="line">    state: <span class="built_in">boolean</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> customCompnent <span class="keyword">extends</span> React.Component&lt;Props, State&gt; &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>공통된 구조의 타입은 interface를 extends로 상속하여 사용했습니다. 사실 컴포넌트 간의 구조를 생각하면서 하기도 쉽지 않은데 interface 간에 구조도 생각하려니 머리가 아팠습니다. 그러나 결과만 놓고 보면 기본적은 Props의 타입 검사는 만족했으며, 컴포넌트에서 어떠한 구조의 Props를 사용하고 있다는 것을 더욱 가시적으로 확인할 수 있다는 점이 정말 좋았습니다.</p>
+<p>하지만 좋은 점만 있는 게 아니었습니다. 1의 일에 1.5배를 추가로 시간을 투자해야 했습니다. 게다가 강하게 타입체크를 하다 보니 쉬이 넘길 수 있는 부분에 추가로 코드가 들어가야 하는 걸 보면 답답함을 느끼곤 했습니다. 하지만 이런 부분은 기존 작업방식에서 빈틈이었던 부분이니 보완해야 할 부분이 맞아 보였습니다.</p>
+<hr>
+<h2 id="마무리"><a href="#마무리" class="headerlink" title="마무리"></a>마무리</h2><p>여러 목표를 갖고 개선 프로젝트를 했는데도, 새로운걸. 적용하고 알게 되면서 또 다른 새로운 게 보이고 더 나은 방법이 보이는 건 어쩔 수 없는 것 같습니다. 하지만 이러한 경험 덕분에 다른 것들을 적용해볼 수 있는 환경 및 정보들을 얻었으니 좋은 시도였다고 생각이 듭니다. 다음 개선에는 또 다른 걸 시도해 보고 싶은데 그중에서 하나는 렌더링 성능 관련인데 충분히 더 알아보고 도전해봐야겠습니다. 읽어 주셔서 감사합니다.</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/contextAPI/">contextAPI</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/javascript/">javascript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/project/">project</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/react/">react</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/react-router/">react-router</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/typescript/">typescript</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/webpack/">webpack</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/09/22/mvc_observer/" data-tooltip="MVC &amp; 옵저버 패턴 적용하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/05/01/iteration_generator/" data-tooltip="Iteration &amp; Generator">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/09/22/mvc_observer/" data-tooltip="MVC &amp; 옵저버 패턴 적용하기">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2018/05/01/iteration_generator/" data-tooltip="Iteration &amp; Generator">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2018/07/19/project-react-2nd/';
+                 
+                    this.page.identifier = '2018/07/19/project-react-2nd/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

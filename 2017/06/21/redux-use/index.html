@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jei&#39;s blog">
+    <title>Redux 코드로 이해하기 - Jei&#39;s blog</title>
+    <meta name="author" content="Jei">
+    
+        <meta name="keywords" content="react">
+    
+    
+        <link rel="icon" href="https://jae-kwang.github.io/blog/assets/images/fox_icon.png">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+    
+    <meta name="description" content="리덕스를 코드로 이해해보자리엑트를 공부하다 보면 자연스럽게 리덕스를 접하게 됩니다.리덕스를 이해하기 위해 많은 문서를 접하지만, 저 같은 경우에는 코드랑 연결이 되어 있을 때 가장 잘 이해하는 것 같습니다. 그래서 코드로 리덕스를 접근해보려고 합니다.">
+<meta name="keywords" content="react">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Redux 코드로 이해하기">
+<meta property="og:url" content="https://jae-kwang.github.io/blog/2017/06/21/redux-use/index.html">
+<meta property="og:site_name" content="Jei&#39;s blog">
+<meta property="og:description" content="리덕스를 코드로 이해해보자리엑트를 공부하다 보면 자연스럽게 리덕스를 접하게 됩니다.리덕스를 이해하기 위해 많은 문서를 접하지만, 저 같은 경우에는 코드랑 연결이 되어 있을 때 가장 잘 이해하는 것 같습니다. 그래서 코드로 리덕스를 접근해보려고 합니다.">
+<meta property="og:locale" content="ko">
+<meta property="og:image" content="https://jae-kwang.github.io/blog/2017/06/21/redux-use/redux-cycle.png">
+<meta property="og:updated_time" content="2018-12-24T05:03:31.235Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redux 코드로 이해하기">
+<meta name="twitter:description" content="리덕스를 코드로 이해해보자리엑트를 공부하다 보면 자연스럽게 리덕스를 접하게 됩니다.리덕스를 이해하기 위해 많은 문서를 접하지만, 저 같은 경우에는 코드랑 연결이 되어 있을 때 가장 잘 이해하는 것 같습니다. 그래서 코드로 리덕스를 접근해보려고 합니다.">
+<meta name="twitter:image" content="https://jae-kwang.github.io/blog/2017/06/21/redux-use/redux-cycle.png">
+<meta property="fb:app_id" content="fullest.sway">
+    
+        <meta rel="publisher" content="https://plus.google.com/fullest.sway@gmail.com"/>
+    
+    
+        
+            <meta property="fb:admins" content="fullest.sway" />
+        
+    
+    
+        <meta property="og:image" content="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c"/>
+    
+    
+        <meta property="og:image" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/redux.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://raw.githubusercontent.com/Jae-kwang/blog/master/source/img/redux.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/blog/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link href='https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css' rel='stylesheet' type='text/css'>
+    <style>
+        * { font-family: 'Spoqa Han Sans', 'Sans-serif'; }
+    </style>
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-87731777-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-8316628427952803",
+            enable_page_level_ads: true
+        });
+    </script>
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/blog/ ">Jei&#39;s blog</a>
+    </h1>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+            </a>
+            <span class="sidebar-profile-name">Jei</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/ ">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">홈</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-categories">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">카테고리</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-tags">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">태그</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/all-archives">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">아카이브</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="#about">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">About</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://github.com/Jae-kwang" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.facebook.com/fullest.sway" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-facebook"></i>
+                    <span class="sidebar-button-desc">Facebook</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="https://www.linkedin.com/in/%EC%9E%AC%EA%B4%91-%EC%A0%95-10b71a111" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">LinkedIn</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="mailto:fullest.sway@gmail.com" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-envelope-o"></i>
+                    <span class="sidebar-button-desc">Mail</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a class="sidebar-button-link " href="/blog/atom.xml">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Redux 코드로 이해하기
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-06-21T08:17:00+09:00">
+	
+		    6월 21, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/blog/categories/js/">js</a>, <a class="category-link" href="/blog/categories/js/lib/">lib</a>, <a class="category-link" href="/blog/categories/js/lib/react/">react</a>
+
+
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h3 id="리덕스를-코드로-이해해보자"><a href="#리덕스를-코드로-이해해보자" class="headerlink" title="리덕스를 코드로 이해해보자"></a>리덕스를 코드로 이해해보자</h3><p>리엑트를 공부하다 보면 자연스럽게 리덕스를 접하게 됩니다.<br>리덕스를 이해하기 위해 많은 문서를 접하지만, 저 같은 경우에는 코드랑 연결이 되어 있을 때 가장 잘 이해하는 것 같습니다. 그래서 코드로 리덕스를 접근해보려고 합니다.</p>
+<a id="more"></a>
+<h3 id="리덕스의-단어들"><a href="#리덕스의-단어들" class="headerlink" title="리덕스의 단어들"></a>리덕스의 단어들</h3><p>“리덕스는 뭐다.”라는 부분은 많은 문서에서 잘 정리되어 있고, 저 또한 그런 곳을 많이 참조하여 읽습니다.<br>그래서 저는 제가 이해한 만큼에서 직접 사용되는 리덕스의 단어들을 코드로써 이야기해 보려고 합니다.</p>
+<h4 id="1-스토어-Store"><a href="#1-스토어-Store" class="headerlink" title="1. 스토어(Store)"></a>1. 스토어(Store)</h4><p>가장 먼저 스토어 입니다. 스토어는 리덕스를 처음 접하자마자 들을 수 있는 단어로 <strong>state(상태 값)</strong>총괄하는 부분입니다. state는 각 컴포넌트가 갖는 특정한 값일 수도 있으며, UI의 상태를 나타낼 수 있습니다.</p>
+<figure class="highlight javascript"><figcaption><span>스토어 형태</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> initState = &#123;</span><br><span class="line">    color: <span class="string">'black'</span>,</span><br><span class="line">    number: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>컴포넌트들은 이 스토어에 액션을 dispatch하고, subscribe 하며 상태를 반영할 수 있습니다.<br>액션, dispatch는 천천히 알아보도록 하죠. </p>
+<h4 id="2-액션-action"><a href="#2-액션-action" class="headerlink" title="2. 액션(action)"></a>2. 액션(action)</h4><p>스토어에 대한 값을 변경하기 위해서 어떤 신호를 보내주어야 하는데 바로 그게 바로 액션입니다.</p>
+<p>예를 들어 컴포넌트에서 어떤 이벤트가 발생한 경우 컴포넌트가 “이벤트가 발생했어! 값을 변화시켜줘!”라고 말하는 상태에 대한 변경 값이 들어 있습니다.</p>
+<p>액션은 무엇이냐? 그냥 객체입니다.<br>다만, 한가지 알아두어야 하는 건 모든 액션객체는 <strong>‘type’</strong>이라는 값을 지닙니다.<br><figure class="highlight javascript"><figcaption><span>액션 형태</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    type: <span class="string">"INCREMENT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>추가로 이벤트 발생 후 변경할 값을 같이 전달해 주려면 아래와 같이 단순히 값을 추가하면 됩니다.</p>
+<figure class="highlight javascript"><figcaption><span>액션 + 값 추가</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    type: <span class="string">"SET_COLOR"</span>,</span><br><span class="line">    color: <span class="string">"black"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-리듀서-reducers"><a href="#3-리듀서-reducers" class="headerlink" title="3. 리듀서(reducers)"></a>3. 리듀서(reducers)</h4><p>리듀서는 액션을 받아서 스토어의 값을 처리하는 작업을 해줍니다.<br>사실, 스토어는 그냥 저장소일 뿐 아무것도 하지 않습니다. 이 리듀서가 바리바리 움직여서 스토어의 값을 변화시켜줍니다.</p>
+<p>그럼 코드로서는 어떨까요? 리듀서는 스토어의 값을 변형시켜준다고 했습니다.<br>위에서 언급된 것처럼 스토어는 값을 담은 객체일 뿐이고 리듀서는 그 값을 변경한다고 했으니 스토어라는 객체의 값을 변경시켜주는 함수일 뿐이죠.</p>
+<p>대신 액션을 받아서 어떤 값인지 판단해서 어떻게 변경해줘야 할지 분기해야 햐죠.<br>그럼 그 부분을 코드로 작성해보면 아래와 같이 됩니다.</p>
+<figure class="highlight javascript"><figcaption><span>스토어 + 리듀서</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 스토어</span></span><br><span class="line"><span class="keyword">const</span> initState = &#123;</span><br><span class="line">    color: <span class="string">'black'</span>,</span><br><span class="line">    number: <span class="number">0</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 리듀서</span></span><br><span class="line"><span class="comment">// 1. state에 store로 설정한 값을 초기값으로 넣습니다.(처음 스토어가 생성됩니다.)</span></span><br><span class="line"><span class="comment">// 2. action에는 지정한 action 객체가 들어옵니다.</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">exampleReducers</span>(<span class="params">state = initState, action</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">        <span class="keyword">case</span> types.INCREMENT: </span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                ...state,</span><br><span class="line">                number: state.number + <span class="number">1</span></span><br><span class="line">            &#125;;</span><br><span class="line">        <span class="keyword">case</span> types.SET_COLOR:</span><br><span class="line">            <span class="keyword">return</span> &#123;</span><br><span class="line">                ...state,</span><br><span class="line">                color: action.color</span><br><span class="line">            &#125;;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> exampleReducers;</span><br></pre></td></tr></table></figure>
+<h3 id="4-액션-생성자-Action-Creator"><a href="#4-액션-생성자-Action-Creator" class="headerlink" title="4. 액션 생성자(Action Creator)"></a>4. 액션 생성자(Action Creator)</h3><p>사실 액션 설명할 때 액션 생성자를 같이 설명하는데, 리듀서 다음에 나온 이유는 제가 이해한 흐름대로 나열하기 때문이죠.</p>
+<p>처음 예제들을 참고하며 공부했을 때 혼동이 있었던 부분이었습니다.<br>액션을 리듀서에 전달할 때 “액션 타입을 지정하는 파일(ActionTypes.js)을 만들고, 액션 생성자를 통해서, 리듀서로 전달한다.”라는 말이 직관적으로 머리에 들어오지 않았습니다.</p>
+<p>그래서 저는 저 나름대로 이해를 했습니다.</p>
+<blockquote><p>Q. 액션 생성자를 만드는 이유.<br>A. 매번 객체(액션 객체)를 만들기 귀찮아서.</p>
+</blockquote>
+<blockquote><p>Q. ActionTypes.js란 파일을 만드는 이유.<br>A. 매번 문자열로 전달하면 귀찮아서.</p>
+</blockquote>
+<h3 id="5-디스패치-dispatch"><a href="#5-디스패치-dispatch" class="headerlink" title="5. 디스패치(dispatch)"></a>5. 디스패치(dispatch)</h3><p>액션 생성자와 디스패치의 설명 순서는 좀 애매했습니다.<br>액션 생성자를 설명할 때 “귀찮다”가 언제 인지를 알아야 사용의 편리함을 아니까요.</p>
+<p>바로 디스패치를 통해 액션을 전달할 때 귀찮습니다.</p>
+<p>이 단락에 액션 생성자 코드를 넣는 건 이상하지만 흐름으로는 이게 맞아 보여서 여기에 쓰겠습니다.<br>정말 이름 그대로 액션이란 객체를 만들어주는 객체(액션) 생성자일 뿐입니다.</p>
+<figure class="highlight javascript"><figcaption><span>액션생성자</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// () =&gt; (&#123;&#125;) 은, function() &#123; return &#123; &#125; &#125; 와 동일한 의미</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> increment = <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    type: types.INCREMENT</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>디스패치는 컴포넌트에서 특정한 이벤트 발동 시 실행이 됩니다.<br>디스패치는 액션(객체)을 스토어로 넘겨주는 이벤트 트리거라고 생각하면 될 것 같습니다.</p>
+<figure class="highlight javascript"><figcaption><span>컴포넌트</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actions <span class="keyword">from</span> <span class="string">'../actions'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function">(<span class="params">dispatch</span>) =&gt;</span> (&#123;</span><br><span class="line">    onIncrement: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(actions.increment()),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>onIncrement()가 실행되면 actions.increment()란 액션 생성자를 통해 액션객체를 생성하고 그 액션객체를 dispatch로 리듀서에 전달되는 겁니다.</p>
+<h3 id="6-react-redux"><a href="#6-react-redux" class="headerlink" title="6. react-redux"></a>6. react-redux</h3><p>그렇다면 이 모든 과정에서 어떻게 액션객체를 컴포넌트에서 스토어로 스토어에서 컴포넌트로 공유가 될 수 있을까요? 바로 ‘react-redux’ 가 해줍니다.</p>
+<h4 id="6-1-Provider"><a href="#6-1-Provider" class="headerlink" title="6-1. Provider"></a>6-1. Provider</h4><p>redux 에서 store는 단 하나입니다. 그렇다면 이게 어디에 위치하는 게 좋을까요?<br>바로 최상단에서 생성되고 하위로 흐르는 방식입니다.</p>
+<p>이는 Provider로 전달할 수 있습니다.<br><figure class="highlight javascript"><figcaption><span>Provider로 store 전달</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Redux 관련 불러오기</span></span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> reducers <span class="keyword">from</span> <span class="string">'./reducers'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Provider &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 스토어 생성</span></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducers);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Provider를 사용해서 스토어를 전달합니다.</span></span><br><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">        &lt;App /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Provider&gt;,</span></span><br><span class="line"><span class="regexp">    document.getElementById('root')</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure></p>
+<p>이렇게 하면 스토어가 컴포넌트로 흐르죠.<br>그럼 컴포넌트에서는 스토어의 state를 어떻게 받으며, action은 어떻게 스토어로 전달이 될까요?</p>
+<h4 id="6-2-Connect"><a href="#6-2-Connect" class="headerlink" title="6-2. Connect"></a>6-2. Connect</h4><p>connect()를 통해 state를 가지며 dispatch를 사용할 수 있습니다.</p>
+<figure class="highlight javascript"><figcaption><span>connect로 action 전달</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> exampleComponent <span class="keyword">from</span> <span class="string">'../components/exampleComponent'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// store의 값을 컴포넌트에게 props 형태로 전달합니다.</span></span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span> (&#123;</span><br><span class="line">    color: state.color,</span><br><span class="line">    number: state.number</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// dispatch를 통해 리듀서로 액션생성자를 전달합니다. props형태로 전달됩니다.</span></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function">(<span class="params">dispatch</span>) =&gt;</span> (&#123;</span><br><span class="line">    onDecrement: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(actions.decrement())</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// connect를 사용하여 스토어와 컴포넌트와 연결을 해줍니다.</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps, mapDispatchToProps)(exampleComponent);</span><br></pre></td></tr></table></figure>
+<h3 id="7-미들웨어-middleware"><a href="#7-미들웨어-middleware" class="headerlink" title="7. 미들웨어(middleware)"></a>7. 미들웨어(middleware)</h3><p>미들웨어는 이름답게 중간에서 뭔가를 처리해줍니다. 그 중간은 바로 액션이 리듀서로 전달되는 사이입니다.</p>
+<p>액션 생성자를 통해 액션이 생성되고 dispatch를 통해 리듀서로 전달되기 전에 어떠한 동작을 추가할 수 있습니다.<br>예를 들어 콘솔을 기록할 수도 있고 액션을 취소시킬 수도 있죠. 다른 액션을 디스패치 할 수도 있습니다.</p>
+<p>미들웨어는 redux 의 applyMiddleware()를 사용해 적용할 수 있습니다.</p>
+<figure class="highlight javascript"><figcaption><span>redux-logger 미들웨어 사용하기</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> modules <span class="keyword">from</span> <span class="string">'./modules'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; createLogger &#125; <span class="keyword">from</span> <span class="string">'redux-logger'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> logger = createLogger(); </span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(modules, applyMiddleware(logger))</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> store;</span><br></pre></td></tr></table></figure>
+<h3 id="Redux-flow"><a href="#Redux-flow" class="headerlink" title="Redux flow"></a>Redux flow</h3><p>아래의 그림은 이해한 부분들을 그림으로 그려놓은 Flow입니다.</p>
+<div class="figure " style="width:;"><img class="fig-img" src="redux-cycle.png" alt=""></div>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">태그들</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/react/">react</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/redux/">redux</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-1/" data-tooltip="Under-the-hood-ReactJS(1) - 마운트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/11/immutable-js/" data-tooltip="immutable.js 알아보기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jei. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/09/28/Under-the-hood-ReactJS-1/" data-tooltip="Under-the-hood-ReactJS(1) - 마운트">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">이전</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/2017/06/11/immutable-js/" data-tooltip="immutable.js 알아보기">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">다음</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jae-kwang.github.io/blog/2017/06/21/redux-use/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://2.gravatar.com/avatar/1fbe0bcf78bc2ec031f823c2342eec8c">
+        
+            <h4 id="about-card-name">Jei</h4>
+        
+            <h5 id="about-card-bio"><p> </p><h2>정재광</h2> <p style="padding: 0 30px; line-height: 30px;">‘<b>넓게보단 깊게, 조급한 마음을 갖지말고, 할 수 있는 만큼에서 최선을 다하자’</b> 라는 생각으로 현재를 살아가고 있는 프론트 엔드 개발자 입니다.</p> <p></p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>프론트 엔드 개발자(Front-end Developer)</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br>
+                South korea
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/blog/assets/images/cover2.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/blog/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://jae-kwang.github.io/blog/2017/06/21/redux-use/';
+                 
+                    this.page.identifier = '2017/06/21/redux-use/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'blog-arw0v41r62';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>
