@@ -11,7 +11,7 @@ keywords:
   - mvc
   - project
   - javascript
-thumbnailImage: thumbnailImage.jpg
+thumbnailImage: thumbnailImage1.jpg
 thumbnailImagePosition: bottom
 metaAlignment: center
 coverImage : coverImage.jpg 
