@@ -35,7 +35,7 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-cssmin": "^0.12.0",
+    "grunt-contrib-cssmin": "^3.0.0",
     "grunt-contrib-uglify": "^4.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-exec": "^0.4.6",
@@ -44,7 +44,7 @@
     "grunt-sync": "^0.8.0",
     "grunt-text-replace": "^0.4.0",
     "hexo-renderer-marked": "^0.2.10",
-    "include-all": "^0.1.6",
+    "include-all": "^4.0.3",
     "load-grunt-tasks": "^4.0.0",
     "rand-token": "^0.2.1"
   },
